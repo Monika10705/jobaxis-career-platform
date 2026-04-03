@@ -1,4 +1,4 @@
-export const BASE_URL = "http://localhost:8000";
+export const BASE_URL = "https://jobaxis-backend.onrender.com";
 
 export const API_PATHS = {
   AUTH: {
@@ -26,7 +26,7 @@ export const API_PATHS = {
 
     SAVE_JOB: (id) => `/api/save-jobs/${id}`,
     UNSAVE_JOB: (id) => `/api/save-jobs/${id}`,
-    GET_SAVED_JOBS: `api/save-jobs/my`,
+    GET_SAVED_JOBS: `/api/save-jobs/my`,
   },
 
   APPLICATIONS: {
