@@ -184,6 +184,26 @@ const JobSeekerDashboard = () => {
 
   const applyToJob = async (jobId) => {
     try {
+
+      // ✅ Auth check (professional way)
+      if (!user) {
+        toast(
+          (t) => (
+            <div>
+              <p>Please login to apply</p>
+              <button
+                onClick={() => navigate("/login")}
+                className="bg-blue-600 text-white px-3 py-1 rounded mt-2"
+              >
+                Login
+              </button>
+            </div>
+          ),
+          { duration: 3000 }
+        );
+        return;
+      }
+
       if (jobId) {
         await axiosInstance.post(API_PATHS.APPLICATIONS.APPLY_TO_JOB(jobId));
         toast.success("Applied to job successfully!");
