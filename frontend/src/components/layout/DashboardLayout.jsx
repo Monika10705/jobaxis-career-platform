@@ -18,16 +18,14 @@ const NavigationItem = ({ item, isActive, onClick, isCollapsed }) => {
   return (
     <button
       onClick={() => onClick(item.id)}
-      className={`w-full flex items-center px-3 py-3 text-sm font-medium rounded-2xl transition-all duration-200 group ${
-        isActive
+      className={`w-full flex items-center px-3 py-3 text-sm font-medium rounded-2xl transition-all duration-200 group ${isActive
           ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 shadow-sm border border-blue-100"
           : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-      }`}
+        }`}
     >
       <Icon
-        className={`h-5 w-5 flex-shrink-0 ${
-          isActive ? "text-blue-600" : "text-slate-500"
-        }`}
+        className={`h-5 w-5 flex-shrink-0 ${isActive ? "text-blue-600" : "text-slate-500"
+          }`}
       />
       {!isCollapsed && <span className="ml-3 truncate">{item.name}</span>}
     </button>
@@ -94,8 +92,8 @@ const DashboardLayout = ({ activeMenu, children }) => {
     currentHour < 12
       ? "Good Morning"
       : currentHour < 18
-      ? "Good Afternoon"
-      : "Good Evening";
+        ? "Good Afternoon"
+        : "Good Evening";
 
   const currentDate = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -107,13 +105,12 @@ const DashboardLayout = ({ activeMenu, children }) => {
     <div className="flex h-screen bg-slate-50">
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 transition-transform duration-300 transform ${
-          isMobile
+        className={`fixed inset-y-0 left-0 z-50 transition-transform duration-300 transform ${isMobile
             ? sidebarOpen
               ? "translate-x-0"
               : "-translate-x-full"
             : "translate-x-0"
-        } ${sidebarCollapsed ? "w-16" : "w-72"} bg-white border-r border-slate-200`}
+          } ${sidebarCollapsed ? "w-16" : "w-72"} bg-white border-r border-slate-200`}
       >
         {/* Brand */}
         <div className="flex items-center h-20 border-b border-slate-200 px-6">
@@ -173,9 +170,8 @@ const DashboardLayout = ({ activeMenu, children }) => {
 
       {/* Main Content */}
       <div
-        className={`flex-1 flex flex-col transition-all duration-300 ${
-          isMobile ? "ml-0" : sidebarCollapsed ? "ml-16" : "ml-72"
-        }`}
+        className={`flex-1 flex flex-col transition-all duration-300 ${isMobile ? "ml-0" : sidebarCollapsed ? "ml-16" : "ml-72"
+          }`}
       >
         {/* Top Navbar */}
         <header className="bg-white/80 backdrop-blur-xl border-b border-slate-200 h-20 flex items-center justify-between px-4 sm:px-6 lg:px-8 sticky top-0 z-30">
@@ -203,21 +199,23 @@ const DashboardLayout = ({ activeMenu, children }) => {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-5">
             {/* Search */}
-            <div className="hidden md:flex items-center bg-slate-50 border border-slate-200 rounded-2xl px-3 h-11 w-64">
+            {/* <div className="hidden md:flex items-center bg-slate-50 border border-slate-200 rounded-2xl px-3 h-11 w-64">
               <Search className="h-4 w-4 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search jobs, candidates..."
                 className="bg-transparent border-none outline-none text-sm px-2 w-full text-slate-700 placeholder:text-slate-400"
               />
-            </div>
+            </div> */}
 
             {/* Notifications */}
-            <button className="relative h-11 w-11 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors flex items-center justify-center">
-              <Bell className="h-5 w-5 text-slate-600" />
-              <span className="absolute top-2 right-2 h-2.5 w-2.5 rounded-full bg-red-500"></span>
+            <button
+              onClick={() => navigate("/notifications")}
+              className="relative bg-gray-100 p-2 rounded-xl hover:bg-gray-100 transition-colors duration-200"
+            >
+              <Bell className="h-5 w-5" />
             </button>
 
             {/* Profile */}

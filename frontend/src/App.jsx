@@ -19,6 +19,7 @@ import ApplicationViewer from "./pages/Employer/ApplicationViewer";
 import EmployerProfilePage from "./pages/Employer/EmployerProfilePage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
+import NotificationsPage from "./pages/Notifications/NotificationsPage";
 
 const App = () => {
   return (
@@ -40,9 +41,10 @@ const App = () => {
           <Route elemment={<ProtectedRoute requiredRole="employer" />}>
             <Route path="/employer-dashboard" element={<EmployerDashboard />} />
             <Route path="/post-job" element={<JobPostingForm />} />
-            <Route path="manage-jobs" element={<ManageJobs />} />
-            <Route path="applicants" element={<ApplicationViewer />} />
-            <Route path="company-profile" element={<EmployerProfilePage />} />
+            <Route path="/manage-jobs" element={<ManageJobs />} />
+            <Route path="/applicants" element={<ApplicationViewer />} />
+            <Route path="/company-profile" element={<EmployerProfilePage />} />
+            <Route path="/notifications" element={<NotificationsPage />} />
           </Route>
 
           {/* Catch all route */}

@@ -35,10 +35,14 @@ export const validateAvatar = (file) => {
 }
 
 export const getInitials = (name) => {
-    return name
+  if (!name || typeof name !== "string") return "NA";
+
+  return name
+    .trim()
     .split(" ")
-    .map((word) => word.charAt(0))
+    .filter(Boolean)
+    .map((word) => word[0])
     .join("")
-    .toUppercase()
+    .toUpperCase()
     .slice(0, 2);
 };
