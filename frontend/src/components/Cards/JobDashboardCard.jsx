@@ -1,33 +1,44 @@
-import { Briefcase  } from "lucide-react"
-import moment from "moment"
+import { Briefcase, MapPin, CalendarDays } from "lucide-react";
+import moment from "moment";
 
-const JobDashboardCard = ({job}) => {
+const JobDashboardCard = ({ job }) => {
   return (
-    <div className="flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-gray-200 transition-colors">
-        <div className="flex items-center space-x-4">
-            <div className="h-10 w-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                <Briefcase className="h-5 w-5 text-blue-600" />
-            </div>
-            <div>
-                <h4 className="text-[15px] font-medium text-gray-900">{job.title}</h4>
-                <p className="text-xs text-gray-500">
-                    {job.location} • {moment(job.createdAt)?.format("Do MM YYYY")}
-                </p>
-            </div>
+    <div className="group flex items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl border border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm transition-all duration-200">
+      <div className="flex items-center gap-4 min-w-0">
+        <div className="h-12 w-12 shrink-0 rounded-2xl bg-blue-50 flex items-center justify-center">
+          <Briefcase className="h-5 w-5 text-blue-600" />
         </div>
-        <div className="flex items-center space-x-3">
-            <span
-            className={`px-3 py-1 text-xs font-medium rounded-full ${
-                !job.isClosed
-                ? "bg-green-100 text-green-700"
-                : "bg-gray-100 text-gray-600"
-            }`}
-            >
-                {job.isClosed ? "Closed" : "Active"}
-            </span>
-        </div>
-    </div>
-  )
-}
 
-export default JobDashboardCard
+        <div className="min-w-0">
+          <h4 className="text-sm sm:text-[15px] font-semibold text-slate-900 truncate">
+            {job.title}
+          </h4>
+
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-slate-500">
+            <span className="inline-flex items-center gap-1">
+              <MapPin className="h-3.5 w-3.5" />
+              {job.location}
+            </span>
+
+            <span className="inline-flex items-center gap-1">
+              <CalendarDays className="h-3.5 w-3.5" />
+              {moment(job.createdAt)?.format("DD MMM YYYY")}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <span
+        className={`shrink-0 px-3 py-1.5 text-xs font-semibold rounded-full ${
+          !job.isClosed
+            ? "bg-emerald-50 text-emerald-700"
+            : "bg-slate-100 text-slate-600"
+        }`}
+      >
+        {job.isClosed ? "Closed" : "Active"}
+      </span>
+    </div>
+  );
+};
+
+export default JobDashboardCard;

@@ -1,30 +1,38 @@
-import { Clock } from 'lucide-react'
+import { Clock, Briefcase } from "lucide-react";
 
 const ApplicantDashboardCard = ({ applicant, position, time }) => {
-    return <div className='flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-gray-200 transition colors'>
-        <div className='flex items-center space-x-4'>
-            <div className='h-10 w-10 bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-xl flex items-center justify-center'>
-                <span className='text-white font-medium text-sm'>
-                    {applicant?.name
-                        ?.split(" ")
-                        ?.map((n) => n[0])
-                        ?.join("")}
-                </span>
-            </div>
-            <div>
-                <h4 className='text-[15px] font-medium text-gray-900'>
-                    {applicant.name}
-                </h4>
-                <p className='text-sm text-gray-500'>{position}</p>
-            </div>
+  return (
+    <div className="group flex items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl border border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm transition-all duration-200">
+      <div className="flex items-center gap-4 min-w-0">
+        <div className="h-12 w-12 shrink-0 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
+          <span className="text-white font-semibold text-sm">
+            {applicant?.name
+              ?.split(" ")
+              ?.map((n) => n[0])
+              ?.join("")}
+          </span>
         </div>
-        <div className='flex items-center space-x-3'>
-            <div className='flex items-center text-xs text-gray-500'>
-                <Clock className='h-3 w-3 mr-1' />
-                {time}
-            </div>
-        </div>
-    </div>
-}
 
-export default ApplicantDashboardCard
+        <div className="min-w-0">
+          <h4 className="text-sm sm:text-[15px] font-semibold text-slate-900 truncate">
+            {applicant?.name}
+          </h4>
+
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-slate-500">
+            <span className="inline-flex items-center gap-1">
+              <Briefcase className="h-3.5 w-3.5" />
+              {position}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 bg-slate-50 px-3 py-1.5 rounded-full">
+        <Clock className="h-3.5 w-3.5" />
+        {time}
+      </div>
+    </div>
+  );
+};
+
+export default ApplicantDashboardCard;
