@@ -7,20 +7,19 @@ import {
   Briefcase,
   Users,
   Eye,
-  Send,
+  ArrowLeft
 } from "lucide-react";
 import { API_PATHS } from "../../utils/apiPaths";
 import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { CATEGORIES, JOB_TYPES } from "../../utils/data";
-import toast from "react-hot-toast";
 import InputField from '../../components/Input/InputField';
 import SelectField from '../../components/Input/SelectField';
 import TextareaField from '../../components/Input/TextareaField';
 import JobPostingPreview from '../../components/Cards/JobPostingPreview';
+import toast from "react-hot-toast";
 
 const JobPostingForm = () => {
-
   const navigate = useNavigate();
   const location = useLocation();
   const jobId = location.state?.jobId || null;
@@ -37,8 +36,8 @@ const JobPostingForm = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
@@ -46,7 +45,6 @@ const JobPostingForm = () => {
       [field]: value,
     }));
 
-    // Clear error when user starts typing
     if (errors[field]) {
       setErrors((prev) => ({
         ...prev,
@@ -56,68 +54,66 @@ const JobPostingForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  if (e) e.preventDefault();
 
-    const validationErrors = validateForm(formData);
+  const validationErrors = validateForm(formData);
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    return;
+  }
+
+  setIsSubmitting(true);
+
+  const jobPayload = {
+    title: formData.jobTitle,
+    description: formData.description,
+    requirements: formData.requirements,
+    location: formData.location,
+    category: formData.category,
+    type: formData.jobType,
+    salaryMin: formData.salaryMin,
+    salaryMax: formData.salaryMax,
+  };
+
+  try {
+    const response = jobId
+      ? await axiosInstance.put(API_PATHS.JOBS.UPDATE_JOB(jobId), jobPayload)
+      : await axiosInstance.post(API_PATHS.JOBS.POST_JOB, jobPayload);
+
+    if (response.status === 200 || response.status === 201) {
+      toast.success(
+        jobId ? "Job Updated Successfully!" : "Job Posted Successfully!"
+      );
+
+      setFormData({
+        jobTitle: "",
+        location: "",
+        category: "",
+        jobType: "",
+        description: "",
+        requirements: "",
+        salaryMin: "",
+        salaryMax: "",
+      });
+
+      navigate("/employer-dashboard");
       return;
     }
 
-    setIsSubmitting(true);
-
-    const jobPayload = {
-      title: formData.jobTitle,
-      description: formData.description,
-      requirements: formData.requirements,
-      location: formData.location,
-      category: formData.category,
-      type: formData.jobType,
-      salaryMin: formData.salaryMin,
-      salaryMax: formData.salaryMax,
-    };
-
-    try {
-      const response = jobId
-        ? await axiosInstance.put(API_PATHS.JOBS.UPDATE_JOB(jobId), jobPayload)
-        : await axiosInstance.post(API_PATHS.JOBS.POST_JOB, jobPayload);
-
-      if (response.status === 200 || response.status === 201) {
-        toast.success(
-          jobId ? "Job Updated Successfully!" : "Job Posted Successfully!"
-        );
-        setFormData({
-          jobTitle: "",
-          location: "",
-          category: "",
-          jobType: "",
-          description: "",
-          requirements: "",
-          salaryMin: "",
-          salaryMax: "",
-        });
-        navigate("/employer-dashboard");
-        return;
-      }
-
-      console.error("Unexpected response:", response);
-      toast.error("Something went wrong. Please try again.");
-    } catch (error) {
-      if (error.response?.data?.message) {
-        console.error("API Error:", error.response.data.message);
-        toast.error(error.response.data.message);
-      } else {
-        console.error("Unexpected error:", error);
-        toast.error("Failed to post/update job. Please try again.")
-      }
-    } finally {
-      setIsSubmitting(false);
+    toast.error("Something went wrong. Please try again.");
+  } catch (error) {
+    if (error.response?.data?.message) {
+      toast.error(error.response.data.message);
+    } else {
+      toast.error("Failed to post/update job. Please try again.");
     }
-  };
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
-
-  //Form validation helper
+  // Form validation helper
   const validateForm = (formData) => {
     const errors = {};
 
@@ -144,7 +140,7 @@ const JobPostingForm = () => {
     if (!formData.salaryMin || !formData.salaryMax) {
       errors.salary = "Both minimum and maximum salary are required";
     } else if (parseInt(formData.salaryMin) >= parseInt(formData.salaryMax)) {
-      errors.salary = "Maximum salary must be greater than minimum salary"
+      errors.salary = "Maximum salary must be greater than minimum salary";
     }
 
     return errors;
@@ -153,10 +149,9 @@ const JobPostingForm = () => {
   const isFormValid = () => {
     const validationErrors = validateForm(formData);
     return Object.keys(validationErrors).length === 0;
-  }
+  };
 
   useEffect(() => {
-
     const fetchJobDetails = async () => {
       if (jobId) {
         try {
@@ -189,16 +184,18 @@ const JobPostingForm = () => {
 
     fetchJobDetails();
 
-    return () => {
-
-    }
-  }, [])
-
+    return () => { };
+  }, []);
 
   if (isPreview) {
     return (
       <DashboardLayout activeMenu='post-job'>
-        <JobPostingPreview formData={formData} setIsPreview={setIsPreview} />
+        <JobPostingPreview
+          formData={formData}
+          setIsPreview={setIsPreview}
+          onSubmit={handleSubmit}
+          isSubmitting={isSubmitting}
+        />
       </DashboardLayout>
     );
   }
@@ -207,30 +204,33 @@ const JobPostingForm = () => {
     <DashboardLayout activeMenu='post-job'>
       <div className='min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 py-8 px-4 sm:px-6 lg:px-8'>
         <div className='max-w-4xl mx-auto'>
-          <div className='bg-white shadow-xl rounded-2xl p-6'>
-            <div className='flex items-center justify-between mb-8'>
-              <div>
-                <h2 className='text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent'>
-                  Post a New Job
-                </h2>
-                <p className='text-sm text-gray-600 mt-1'>
-                  Fill out the form below to create your job posting
-                </p>
-              </div>
-              <div className='flex items-center space-x-2'>
+          <div className='bg-white shadow-xl rounded-2xl p-6 sm:p-8'>
+            <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8'>
+              <div className='flex items-start sm:items-center gap-3'>
                 <button
-                  onClick={() => setIsPreview(true)}
-                  disabled={!isFormValid()}
-                  className='group flex items-center space-x-2 px-6 py-3 text-sm font-medium text-gray-600 hover:text-white bg-white/50 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-600 border border-gray-200 hover:border-transparent rounded-xl transition-all duration-300 shadow-lg shadow-gray-100 hover:shadow-xl transform hover:-translate-y-0.5'
+                  type='button'
+                  onClick={() => navigate(-1)}
+                  className='shrink-0 h-11 w-11 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors duration-200'
                 >
-                  <Eye className='h-4 w-4 transition-transform group-hover:-translate-x-1' />
-                  <span>Preview</span>
+                  <ArrowLeft className='h-5 w-5' />
                 </button>
+
+                <div>
+                  <h2 className='text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent'>
+                    Post a New Job
+                  </h2>
+                  <p className='text-sm text-slate-600 mt-1'>
+                    Fill out the form below to create your job posting
+                  </p>
+                </div>
+              </div>
+
+              <div className='hidden sm:block px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-500'>
+                Complete the form to preview your job post
               </div>
             </div>
 
             <div className='space-y-6'>
-              {/* Job Title */}
               <InputField
                 label="Job Title"
                 id="jobTitle"
@@ -242,9 +242,8 @@ const JobPostingForm = () => {
                 icon={Briefcase}
               />
 
-              {/* location & remote */}
               <div className='space-y-4'>
-                <div className='flex flex-xol sm:flex-row sm:items-end sm:space-x-4 space-y-4 sm:space-y-0'>
+                <div className='flex flex-col sm:flex-row sm:items-end sm:space-x-4 space-y-4 sm:space-y-0'>
                   <div className='flex-1'>
                     <InputField
                       label="Location"
@@ -261,7 +260,6 @@ const JobPostingForm = () => {
                 </div>
               </div>
 
-              {/* category & job type */}
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                 <SelectField
                   label='Category'
@@ -290,7 +288,6 @@ const JobPostingForm = () => {
                 />
               </div>
 
-              {/* Desctiption */}
               <TextareaField
                 label="Job Description"
                 id="description"
@@ -300,11 +297,10 @@ const JobPostingForm = () => {
                   handleInputChange("description", e.target.value)
                 }
                 error={errors.description}
-                helperText='Include key responsibilities, day-to-day tasks, and what makes this role excitin'
+                helperText='Include key responsibilities, day-to-day tasks, and what makes this role exciting'
                 required
               />
 
-              {/* requirements */}
               <TextareaField
                 label="Requirements"
                 id='requirements'
@@ -314,45 +310,46 @@ const JobPostingForm = () => {
                   handleInputChange("requirements", e.target.value)
                 }
                 error={errors.requirements}
-                helperText="Include required skills, experience level, education and any preferenced qualifications"
+                helperText="Include required skills, experience level, education and any preferred qualifications"
                 required
               />
 
-              {/* salary range */}
               <div className='space-y-2'>
-                <label className='block text-sm font-medium text-gray-700'>
+                <label className='block text-sm font-medium text-slate-700'>
                   Salary Range <span className='text-red-500'>*</span>
                 </label>
-                <div className='grid grid-cols-3 gap-3'>
+                <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
                   <div className='relative'>
                     <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10'>
-                      <DollarSign className='h-5 w-5 text-gray-400' />
+                      <DollarSign className='h-5 w-5 text-slate-400' />
                     </div>
                     <input
                       type='number'
-                      placeholder='Min'
+                      placeholder='Minimum Salary'
                       value={formData.salaryMin}
                       onChange={(e) =>
                         handleInputChange("salaryMin", e.target.value)
                       }
-                      className='w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg text-base focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-opacity-20 focus:border-blue-500 transition-colors duration-200'
+                      className='w-full pl-10 pr-3 py-3 border border-slate-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-colors duration-200'
                     />
                   </div>
+
                   <div className='relative'>
                     <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10'>
-                      <DollarSign className='h-5 w-5 text-gray-400' />
+                      <DollarSign className='h-5 w-5 text-slate-400' />
                     </div>
                     <input
                       type='number'
-                      placeholder='Max'
+                      placeholder='Maximum Salary'
                       value={formData.salaryMax}
                       onChange={(e) =>
                         handleInputChange("salaryMax", e.target.value)
                       }
-                      className='w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg text-base focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-opacity-20 focus:border-blue-500 transition-colors duration-200'
+                      className='w-full pl-10 pr-3 py-3 border border-slate-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-colors duration-200'
                     />
                   </div>
                 </div>
+
                 {errors.salary && (
                   <div className='flex items-center space-x-1 text-sm text-red-600'>
                     <AlertCircle className='h-4 w-4' />
@@ -361,24 +358,23 @@ const JobPostingForm = () => {
                 )}
               </div>
 
-              {/* Submit button */}
-              <div className='pt-2'>
+              <div className='pt-4 flex flex-col sm:flex-row items-center gap-3'>
                 <button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting || !isFormValid()}
-                  className='w-full flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-offset-1 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed outline-none transition-colors duration-200'
+                  type='button'
+                  onClick={() => navigate(-1)}
+                  className='w-full sm:w-auto px-5 py-3 rounded-xl border border-slate-300 text-slate-700 font-medium hover:bg-slate-50 transition-colors duration-200'
                 >
-                  {isSubmitting ? (
-                    <>
-                      <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2'></div>
-                      Publishing Job...
-                    </>
-                  ) : (
-                    <>
-                      <Send className='h-5 w-5 mr-2' />
-                      Post Job
-                    </>
-                  )}
+                  Back
+                </button>
+
+                <button
+                  type='button'
+                  onClick={() => setIsPreview(true)}
+                  disabled={!isFormValid()}
+                  className='w-full sm:flex-1 flex items-center justify-center px-4 py-3 rounded-xl text-base font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200'
+                >
+                  <Eye className='h-5 w-5 mr-2' />
+                  Preview Job
                 </button>
               </div>
             </div>
@@ -386,7 +382,7 @@ const JobPostingForm = () => {
         </div>
       </div>
     </DashboardLayout>
-  )
-}
+  );
+};
 
-export default JobPostingForm
+export default JobPostingForm;

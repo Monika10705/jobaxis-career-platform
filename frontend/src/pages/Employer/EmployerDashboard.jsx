@@ -6,7 +6,8 @@ import {
   Building2,
   TrendingUp,
   CheckCircle2,
-  Subtitles
+  Subtitles,
+  ArrowRight
 } from "lucide-react";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
@@ -106,7 +107,7 @@ const EmployerDashboard = () => {
       {isLoading ? (
         <LoadingSpinner />
       ) : (<div className="max-w-7xl mx-auto space-y-8">
-        
+
         {/* dashboard stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <StatCard
@@ -138,43 +139,75 @@ const EmployerDashboard = () => {
           />
         </div>
 
-              {/* Quick Actions */}
+        {/* Quick Actions */}
+        {/* Quick Actions */}
         <Card
           title="Quick Actions"
           subtitle="Common tasks to get you started"
         >
-          <div className="grid grid-cols-1 sm:grid:cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
               {
-                title : "Post New Job",
+                title: "Post New Job",
+                desc: "Create a listing and reach top candidates",
                 icon: Plus,
-                color: "bg-blue-50 text-blue-700",
+                iconColor: "#7C3AED",
+                iconBg: "#EDE9FE",
+                dotColor: "#7C3AED",
                 path: "/post-job",
               },
               {
                 title: "Review Applications",
+                desc: "Shortlist and manage incoming candidates",
                 icon: Users,
-                color: "bg-green-50 text-green-700",
+                iconColor: "#059669",
+                iconBg: "#D1FAE5",
+                dotColor: "#059669",
                 path: "/manage-jobs",
               },
               {
                 title: "Company Settings",
+                desc: "Update your profile and preferences",
                 icon: Building2,
-                color: "bg-orange-50 text-orange-700",
-                path: "/company-profile"
+                iconColor: "#D97706",
+                iconBg: "#FEF3C7",
+                dotColor: "#D97706",
+                path: "/company-profile",
               },
             ].map((action, index) => (
               <button
-              key={index}
-              className="flex items-center space-x-3 p-4 rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all duration-200 text-left cursor-pointer"
-              onClick={() => navigate(action.path)}
+                key={index}
+                onClick={() => navigate(action.path)}
+                className="group relative flex flex-col gap-4 p-5 rounded-[14px] border border-gray-100 bg-gray-50 hover:bg-white hover:border-violet-200 hover:shadow-[0_4px_16px_rgba(124,58,237,0.08)] hover:-translate-y-0.5 transition-all duration-200 text-left cursor-pointer overflow-hidden"
               >
-                <div className={`p-2 rounded-lg ${action.color}`}>
-                  <action.icon className="h-5 w-5" />
+                {/* color dot accent */}
+                <span
+                  className="absolute top-3.5 right-3.5 w-1.5 h-1.5 rounded-full"
+                  style={{ background: action.dotColor }}
+                />
+
+                {/* icon row + arrow */}
+                <div className="flex items-center justify-between">
+                  <div
+                    className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                    style={{ background: action.iconBg }}
+                  >
+                    <action.icon
+                      className="h-5 w-5"
+                      style={{ color: action.iconColor }}
+                    />
+                  </div>
+                  <ArrowRight
+                    className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                    style={{ color: action.iconColor }}
+                  />
                 </div>
-                <span className="font-medium text-gray-900">
-                  {action.title}
-                </span>
+
+                {/* text */}
+                <div>
+                  <p className="text-sm font-bold text-gray-900">{action.title}</p>
+                  <p className="text-xs text-gray-500 mt-1 leading-relaxed">{action.desc}</p>
+                </div>
               </button>
             ))}
           </div>
@@ -230,7 +263,7 @@ const EmployerDashboard = () => {
           </Card>
         </div>
 
-        
+
       </div>
       )}
     </DashboardLayout>
