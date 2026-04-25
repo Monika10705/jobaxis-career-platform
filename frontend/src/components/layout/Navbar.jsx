@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import {
     Briefcase,
     Bookmark,
+    Bell
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -31,47 +32,64 @@ const Navbar = () => {
             <div className="flex items-center justify-between h-16">
                 {/* logo */}
                 <Link to='/find-jobs' className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-                        <Briefcase className="w-5 h-5 text-white" />
+                    <div className="h-10 w-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-md">
+                        <Briefcase className="h-5 w-5 text-white" />
                     </div>
-                    <span className="text-lg font-bold text-gray-900">JobAxis</span>
+                    <div>
+                        <span className="text-slate-900 font-bold text-xl block">
+                            JobAxis
+                        </span>
+                        <span className="text-xs text-slate-500">
+                            Jobseeker Workspace
+                        </span>
+                    </div>
                 </Link>
 
                 {/* auth buttons */}
                 <div className="flex items-center space-x-3">
                     {user && (
                         <button
-                        className="p-2 rounded-xl hover:bg-gray-100 transition-colors duration-200 relative"
-                        onClick={() => navigate("/saved-jobs")}
+                            className="p-2 rounded-xl hover:bg-gray-100 transition-colors duration-200 relative"
+                            onClick={() => navigate("/saved-jobs")}
                         >
-                            <Bookmark className="h-5 w-5 text-gray-500"/>
+                            <Bookmark className="h-5 w-5 text-gray-500" />
                         </button>
                     )}
+                    <button
+                        onClick={() => navigate("/notifications")}
+                        className="relative bg-gray-100 p-2 rounded-xl hover:bg-gray-200 transition-colors duration-200"
+                    >
+                        <Bell className="h-5 w-5 text-gray-700" />
+
+                        {user?.lastNotificationSeen && (
+                            <span className="absolute top-1.5 right-1.5 h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-white"></span>
+                        )}
+                    </button>
 
                     {isAuthenticated ? (
                         <ProfileDropdown
-                        isOpen={profileDropdownOpen}
-                        onToggle={(e) => {
-                            e.stopPropagation();
-                            setProfileDropdownOpen(!profileDropdownOpen);
-                        }}
-                        avatar={user?.avatar || ""}
-                        companyName={user?.name || ""}
-                        email={user?.email || ""}
-                        userRole={user.role || ""}
-                        onLogout={logout}
+                            isOpen={profileDropdownOpen}
+                            onToggle={(e) => {
+                                e.stopPropagation();
+                                setProfileDropdownOpen(!profileDropdownOpen);
+                            }}
+                            avatar={user?.avatar || ""}
+                            companyName={user?.name || ""}
+                            email={user?.email || ""}
+                            userRole={user.role || ""}
+                            onLogout={logout}
                         />
                     ) : (
                         <>
                             <a
-                            href="/login"
-                            className="text-gray-600 hover:text-gray-900 transition-colors font-medium px-4 py-2 rounded-lg hover:bg-gray-50"
+                                href="/login"
+                                className="text-gray-600 hover:text-gray-900 transition-colors font-medium px-4 py-2 rounded-lg hover:bg-gray-50"
                             >
                                 Login
                             </a>
                             <a
-                            href="/signup"
-                            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-sm hover:shadow-md"
+                                href="/signup"
+                                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-sm hover:shadow-md"
                             >
                                 Sign Up
                             </a>
