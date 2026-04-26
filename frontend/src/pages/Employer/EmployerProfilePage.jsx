@@ -13,20 +13,25 @@ const EmployerProfilePage = () => {
 
   const [profileData, setProfileData] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [formData, setFormData] = useState({ ...profileData });
+
+  const buildUserData = (u) => ({
+    name: u?.name || "",
+    email: u?.email || "",
+    avatar: u?.avatar || null,
+    companyName: u?.companyName || "",
+    companyDescription: u?.companyDescription || "",
+    companyLogo: u?.companyLogo || null,
+  });
+
+  const [formData, setFormData] = useState(() => buildUserData(user));
   const [uploading, setUploading] = useState({ avatar: false, logo: false });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (user) {
-      setProfileData({
-        name: user?.name || "",
-        email: user?.email || "",
-        avatar: user?.avatar || null,
-        companyName: user?.companyName || "",
-        companyDescription: user?.companyDescription || "",
-        companyLogo: user?.companyLogo || null,
-      });
+      const data = buildUserData(user);
+      setProfileData(data);
+      setFormData(data);
     }
   }, [user]);
 
@@ -157,7 +162,7 @@ const EmployerProfilePage = () => {
 
                   <div className="flex items-center gap-4">
                     <img
-                      src={profileData.avatar}
+                      src={profileData.avatar || ""}
                       alt="Avatar"
                       className="w-20 h-20 rounded-3xl object-cover border border-slate-200"
                     />
@@ -192,7 +197,7 @@ const EmployerProfilePage = () => {
 
                   <div className="flex items-center gap-4">
                     <img
-                      src={profileData.companyLogo}
+                      src={profileData.companyLogo || ""}
                       alt="Company logo"
                       className="w-20 h-20 rounded-3xl object-cover border border-slate-200"
                     />

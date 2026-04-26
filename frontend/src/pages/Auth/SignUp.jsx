@@ -14,7 +14,8 @@ import {
   Loader,
   Briefcase,
   ShieldCheck,
-  Sparkles
+  Sparkles,
+  KeyRound,
 } from 'lucide-react'
 import { validateEmail, validatePassword, validateAvatar } from '../../utils/helper';
 import axiosInstance from '../../utils/axiosInstance';
@@ -24,6 +25,15 @@ import { useAuth } from '../../context/AuthContext';
 
 const SignUp = () => {
   const { login } = useAuth();
+
+  const [otpState, setOtpState] = useState({
+    sent: false,
+    verified: false,
+    otp: '',
+    sending: false,
+    verifying: false,
+    error: '',
+  });
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -98,6 +108,35 @@ const SignUp = () => {
         }))
       }
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSendOtp = async () => {
+    const emailErr = validateEmail(formData.email);
+    if (emailErr) {
+      setFormState(prev => ({ ...prev, errors: { ...prev.errors, email: emailErr } }));
+      return;
+    }
+    setOtpState(prev => ({ ...prev, sending: true, error: '' }));
+    try {
+      await axiosInstance.post(API_PATHS.AUTH.SEND_REGISTER_OTP, { email: formData.email });
+      setOtpState(prev => ({ ...prev, sending: false, sent: true }));
+    } catch (err) {
+      setOtpState(prev => ({ ...prev, sending: false, error: err?.response?.data?.message || 'Failed to send OTP' }));
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (otpState.otp.length !== 6) {
+      setOtpState(prev => ({ ...prev, error: 'Enter the 6-digit OTP' }));
+      return;
+    }
+    setOtpState(prev => ({ ...prev, verifying: true, error: '' }));
+    try {
+      await axiosInstance.post(API_PATHS.AUTH.VERIFY_REGISTER_OTP, { email: formData.email, otp: otpState.otp });
+      setOtpState(prev => ({ ...prev, verifying: false, verified: true }));
+    } catch (err) {
+      setOtpState(prev => ({ ...prev, verifying: false, error: err?.response?.data?.message || 'Invalid OTP' }));
     }
   };
 
@@ -336,17 +375,74 @@ const SignUp = () => {
                   <label className='block text-sm font-semibold text-slate-700 mb-2'>
                     Email *
                   </label>
-                  <div className='relative'>
-                    <Mail className='absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5' />
-                    <input
-                      type='email'
-                      name='email'
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className={`w-full pl-12 pr-4 py-3.5 rounded-2xl border ${formState.errors.email ? 'border-red-500' : 'border-slate-300'} focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all`}
-                      placeholder='Enter your email'
-                    />
+                  <div className='flex gap-2'>
+                    <div className='relative flex-1'>
+                      <Mail className='absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5' />
+                      <input
+                        type='email'
+                        name='email'
+                        value={formData.email}
+                        onChange={(e) => {
+                          handleInputChange(e);
+                          // reset OTP if email changes
+                          setOtpState({ sent: false, verified: false, otp: '', sending: false, verifying: false, error: '' });
+                        }}
+                        disabled={otpState.verified}
+                        className={`w-full pl-12 pr-4 py-3.5 rounded-2xl border ${formState.errors.email ? 'border-red-500' : otpState.verified ? 'border-green-400 bg-green-50' : 'border-slate-300'} focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all`}
+                        placeholder='Enter your email'
+                      />
+                    </div>
+                    {!otpState.verified && (
+                      <button
+                        type='button'
+                        onClick={handleSendOtp}
+                        disabled={otpState.sending || !formData.email}
+                        className='px-4 py-3 bg-blue-600 text-white rounded-2xl text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors whitespace-nowrap'
+                      >
+                        {otpState.sending ? <Loader className='w-4 h-4 animate-spin' /> : otpState.sent ? 'Resend' : 'Send OTP'}
+                      </button>
+                    )}
+                    {otpState.verified && (
+                      <div className='flex items-center px-3 text-green-600'>
+                        <CheckCircle className='w-5 h-5' />
+                      </div>
+                    )}
                   </div>
+
+                  {/* OTP input */}
+                  {otpState.sent && !otpState.verified && (
+                    <div className='mt-3 flex gap-2'>
+                      <div className='relative flex-1'>
+                        <KeyRound className='absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4' />
+                        <input
+                          type='text'
+                          value={otpState.otp}
+                          onChange={(e) => setOtpState(prev => ({ ...prev, otp: e.target.value.replace(/\D/g, '').slice(0, 6), error: '' }))}
+                          placeholder='Enter 6-digit OTP'
+                          className='w-full pl-11 pr-4 py-3 border border-slate-300 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none tracking-widest text-center font-bold'
+                        />
+                      </div>
+                      <button
+                        type='button'
+                        onClick={handleVerifyOtp}
+                        disabled={otpState.verifying}
+                        className='px-4 py-3 bg-green-600 text-white rounded-2xl text-sm font-medium hover:bg-green-700 disabled:opacity-50 transition-colors'
+                      >
+                        {otpState.verifying ? <Loader className='w-4 h-4 animate-spin' /> : 'Verify'}
+                      </button>
+                    </div>
+                  )}
+
+                  {otpState.error && (
+                    <p className='text-red-500 text-sm mt-2 flex items-center gap-1'>
+                      <AlertCircle className='w-4 h-4' />{otpState.error}
+                    </p>
+                  )}
+                  {otpState.verified && (
+                    <p className='text-green-600 text-sm mt-2 flex items-center gap-1'>
+                      <CheckCircle className='w-4 h-4' /> Email verified
+                    </p>
+                  )}
                   {formState.errors.email && (
                     <p className='text-red-500 text-sm mt-2 flex items-center'>
                       <AlertCircle className='w-4 h-4 mr-1' />
@@ -509,7 +605,7 @@ const SignUp = () => {
 
                 <button
                   type='submit'
-                  disabled={formState.loading}
+                  disabled={formState.loading || !otpState.verified}
                   className='cursor-pointer w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3.5 rounded-2xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 shadow-lg shadow-blue-100'
                 >
                   {formState.loading ? (

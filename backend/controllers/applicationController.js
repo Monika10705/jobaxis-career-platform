@@ -1,5 +1,6 @@
 const Application = require("../models/Application");
 const Job = require("../models/Job");
+const { sendApplicationConfirmationEmail, sendStatusUpdateEmail } = require("../utils/emailService");
 
 //@desc  Apply to a job
 exports.applyToJob = async(req, res) => {
@@ -20,10 +21,14 @@ exports.applyToJob = async(req, res) => {
         const application = await Application.create({
             job: req.params.jobId,
             applicant: req.user._id,
-            resume: req.user.resume, // assuming resume is stored in user profile
+            resume: req.user.resume,
         });
 
         res.status(201).json(application);
+
+        // Send confirmation email (non-blocking)
+        const job = await Job.findById(req.params.jobId).select("title companyName");
+        if (job) sendApplicationConfirmationEmail(req.user, job);
     } catch (err) {
         res.status(500).json({message: err.message});
     }
@@ -94,15 +99,18 @@ exports.updateStatus = async (req, res) => {
             return res.status(403).json({ message: 'Not authorized to update this application' });
         }
 
-        // update status
         app.status = status;
-
         await app.save();
 
         res.json({
             message: "Application status updated",
             status: app.status
         });
+
+        // Notify applicant of status change (non-blocking)
+        const User = require("../models/User");
+        const applicant = await User.findById(app.applicant).select("name email");
+        if (applicant) sendStatusUpdateEmail(applicant, app.job, status);
     } catch (err) {
         res.status(500).json({message: err.message});
     }

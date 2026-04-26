@@ -16,9 +16,11 @@ import toast from "react-hot-toast";
 import uploadImage from "../../utils/uploadImage";
 import Navbar from "../../components/layout/Navbar";
 import { Link } from "react-router-dom";
+import ChangeEmailModal from "../../components/ChangeEmailModal";
 
 const UserProfile = () => {
   const { user, updateUser } = useAuth();
+  const [showChangeEmail, setShowChangeEmail] = useState(false);
 
   const [profileData, setProfileData] = useState({
     name: user?.name || "",
@@ -119,7 +121,7 @@ const UserProfile = () => {
     return () => {};
   }, [user]);
 
-  return (
+  return ( <>
     <div className="bg-slate-50 min-h-screen">
       <Navbar />
 
@@ -217,12 +219,21 @@ const UserProfile = () => {
                     <Mail className="w-4 h-4" />
                     Email Address
                   </label>
-                  <input
-                    type="email"
-                    value={formData.email}
-                    disabled
-                    className="w-full px-4 py-3 border border-slate-200 rounded-2xl bg-slate-50 text-slate-500"
-                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="email"
+                      value={formData.email}
+                      disabled
+                      className="flex-1 px-4 py-3 border border-slate-200 rounded-2xl bg-slate-50 text-slate-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowChangeEmail(true)}
+                      className="px-4 py-3 border border-slate-200 rounded-2xl text-sm text-blue-600 hover:bg-blue-50 transition-colors whitespace-nowrap"
+                    >
+                      Change
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -306,7 +317,9 @@ const UserProfile = () => {
         </div>
       </div>
     </div>
-  );
+
+    {showChangeEmail && <ChangeEmailModal onClose={() => setShowChangeEmail(false)} />}
+  </> );
 };
 
 export default UserProfile;

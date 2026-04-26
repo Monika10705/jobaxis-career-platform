@@ -1,12 +1,22 @@
-export const BASE_URL = "https://jobaxis-backend.onrender.com";
+export const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://jobaxis-backend.onrender.com";
 
 export const API_PATHS = {
   AUTH: {
-    REGISTER: "/api/auth/register", // Signup
-    LOGIN: "/api/auth/login", // Authenticate user & return JWT token
-    GET_PROFILE: "/api/auth/profile", // Get logged-in user details
-    UPDATE_PROFILE: "/api/user/profile", // Update profile details
-    DELETE_RESUME: "/api/user/resume", // Delete Resume details
+    REGISTER: "/api/auth/register",
+    LOGIN: "/api/auth/login",
+    GET_PROFILE: "/api/auth/profile",
+    UPDATE_PROFILE: "/api/user/profile",
+    DELETE_RESUME: "/api/user/resume",
+
+    // OTP / Password / Email
+    FORGOT_PASSWORD: "/api/auth/forgot-password",
+    RESET_PASSWORD: "/api/auth/reset-password",
+    REQUEST_EMAIL_CHANGE: "/api/auth/request-email-change",
+    CONFIRM_EMAIL_CHANGE: "/api/auth/confirm-email-change",
+    SEND_VERIFY_EMAIL: "/api/auth/send-verify-email",
+    VERIFY_EMAIL: "/api/auth/verify-email",
+    SEND_REGISTER_OTP: "/api/auth/send-register-otp",
+    VERIFY_REGISTER_OTP: "/api/auth/verify-register-otp",
   },
 
   DASHBOARD: {

@@ -8,3 +8,4 @@ frontend/.env
 
 build/
 dist/
+frontend/.env.local

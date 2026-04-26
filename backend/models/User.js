@@ -14,6 +14,17 @@ const userSchema = new mongoose.Schema(
     companyName: String,
     companyDescription: String,
     companyLogo: String,
+
+    // OTP fields
+    otp: String,
+    otpExpiry: Date,
+    otpPurpose: { type: String, enum: ["reset-password", "change-email", "verify-email"] },
+
+    // pending email change
+    pendingEmail: String,
+
+    // email verified
+    isEmailVerified: { type: Boolean, default: false },
   },
   { timestamps: true },
 );

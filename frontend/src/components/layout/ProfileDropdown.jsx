@@ -19,7 +19,7 @@ const ProfileDropdown = ({
         >
             {avatar ? (
                 <img
-                    src={`https://jobaxis-backend.onrender.com/${avatar}`}
+                    src={avatar}
                     alt="Avatar"
                     className="h-9 w-9 object-cover rounded-xl"
                 />

@@ -8,6 +8,7 @@ import { Toaster } from "react-hot-toast";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import SignUp from "./pages/Auth/SignUp";
 import Login from "./pages/Auth/Login";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
 import JobSeekerDashboard from "./pages/JobSeeker/JobSeekerDashboard";
 import JobDetails from "./pages/JobSeeker/JobDetails";
 import SavedJobs from "./pages/JobSeeker/SavedJobs";
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
           <Route path="/find-jobs" element={<JobSeekerDashboard />} />
           <Route path="job/:jobId" element={<JobDetails />} />

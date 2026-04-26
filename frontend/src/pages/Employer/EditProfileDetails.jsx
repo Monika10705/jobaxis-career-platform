@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Save,
   X,
@@ -8,6 +9,7 @@ import {
   UploadCloud,
 } from "lucide-react";
 import DashboardLayout from "../../components/layout/DashboardLayout";
+import ChangeEmailModal from "../../components/ChangeEmailModal";
 
 const EditProfileDetails = ({
   formData,
@@ -18,6 +20,7 @@ const EditProfileDetails = ({
   saving,
   uploading,
 }) => {
+  const [showChangeEmail, setShowChangeEmail] = useState(false);
   return (
     <DashboardLayout activeMenu="company-profile">
       {formData && (
@@ -57,14 +60,7 @@ const EditProfileDetails = ({
                     <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
                       <div className="relative">
                         <img
-                          src={
-                            formData?.avatar
-                              ? `${import.meta.env.VITE_API_BASE_URL}/${formData.avatar.replace(
-                                  /^https?:\/\/localhost:8000\//,
-                                  ""
-                                )}`
-                              : ""
-                          }
+                          src={formData?.avatar || ""}
                           alt="Avatar"
                           className="w-24 h-24 rounded-3xl object-cover border border-slate-200"
                         />
@@ -120,14 +116,23 @@ const EditProfileDetails = ({
                       <label className="block text-sm font-medium text-slate-700 mb-2">
                         Email Address
                       </label>
-                      <div className="relative">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                        <input
-                          type="email"
-                          value={formData.email}
-                          disabled
-                          className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-2xl bg-white text-slate-500"
-                        />
+                      <div className="flex gap-2">
+                        <div className="relative flex-1">
+                          <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                          <input
+                            type="email"
+                            value={formData.email}
+                            disabled
+                            className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-2xl bg-white text-slate-500"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setShowChangeEmail(true)}
+                          className="px-4 py-3 border border-slate-200 rounded-2xl text-sm text-blue-600 hover:bg-blue-50 transition-colors whitespace-nowrap"
+                        >
+                          Change
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -152,11 +157,7 @@ const EditProfileDetails = ({
                     <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
                       <div className="relative">
                         <img
-                          src={
-                            formData.companyLogo
-                              ? `https://jobaxis-backend.onrender.com/${formData.companyLogo}`
-                              : ""
-                          }
+                          src={formData.companyLogo || ""}
                           alt="Company Logo"
                           className="w-24 h-24 rounded-3xl object-cover border border-slate-200"
                         />
@@ -250,6 +251,7 @@ const EditProfileDetails = ({
           </div>
         </div>
       )}
+      {showChangeEmail && <ChangeEmailModal onClose={() => setShowChangeEmail(false)} />}
     </DashboardLayout>
   );
 };
