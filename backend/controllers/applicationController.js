@@ -1,117 +1,138 @@
 const Application = require("../models/Application");
 const Job = require("../models/Job");
-const { sendApplicationConfirmationEmail, sendStatusUpdateEmail } = require("../utils/emailService");
+const {
+  sendApplicationConfirmationEmail,
+  sendStatusUpdateEmail,
+} = require("../utils/emailService");
 
 //@desc  Apply to a job
-exports.applyToJob = async(req, res) => {
-    try {
-        if (req.user.role !== "jobseeker") {
-            return res.status(403).json({ message: "Only job seekers can apply" });
-        }
-
-        const existing = await Application.findOne({
-            job: req.params.jobId,
-            applicant: req.user._id,
-        });
-
-        if(existing) {
-            return res.status(400).json({ message: "Already applied to this job" });
-        }
-
-        const application = await Application.create({
-            job: req.params.jobId,
-            applicant: req.user._id,
-            resume: req.user.resume,
-        });
-
-        res.status(201).json(application);
-
-        // Send confirmation email (non-blocking)
-        const job = await Job.findById(req.params.jobId).select("title companyName");
-        if (job) sendApplicationConfirmationEmail(req.user, job);
-    } catch (err) {
-        res.status(500).json({message: err.message});
+exports.applyToJob = async (req, res) => {
+  try {
+    if (req.user.role !== "jobseeker") {
+      return res.status(403).json({ message: "Only job seekers can apply" });
     }
+
+    const existing = await Application.findOne({
+      job: req.params.jobId,
+      applicant: req.user._id,
+    });
+
+    if (existing) {
+      return res.status(400).json({ message: "Already applied to this job" });
+    }
+
+    const application = await Application.create({
+      job: req.params.jobId,
+      applicant: req.user._id,
+      resume: req.user.resume,
+    });
+
+    res.status(201).json(application);
+
+    // Send confirmation email (non-blocking)
+    const job = await Job.findById(req.params.jobId).select(
+      "title companyName",
+    );
+    if (job) sendApplicationConfirmationEmail(req.user, job);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 //@desc  Get logged-in user's applications
 exports.getMyApplications = async (req, res) => {
-    try {
-        const apps= await Application.find({ applicant: req.user._id })
-        .populate("job", "title company location type")
-        .sort({ createdAt: -1 });
+  try {
+    const apps = await Application.find({ applicant: req.user._id })
+      .populate({
+        path: "job",
+        select: "title company location type",
+        populate: {
+          path: "company",
+          select: "name",
+        },
+      })
+      .sort({ createdAt: -1 });
 
-        res.json(apps);
-    } catch (err) {
-        res.status(500).json({message: err.message});
-    }
+    res.json(apps);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 //@desc  Get all applications for a job (employer)
 exports.getApplicantsForJob = async (req, res) => {
-    try {
-        const job = await Job.findById(req.params.jobId);
+  try {
+    const job = await Job.findById(req.params.jobId);
 
-        if (!job || job.company.toString() !== req.user._id.toString()) {
-            return res.status(403).json({ message: "Not authorized to view applicants"});
-        }
-
-        const applications = await Application.find({ job: req.params.jobId })
-        .populate("job", "title location category type")
-        .populate("applicant", "name email avatar resume");
-
-        res.json(applications);
-    } catch (err) {
-        res.status(500).json({message: err.message});
+    if (!job || job.company.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to view applicants" });
     }
+
+    const applications = await Application.find({ job: req.params.jobId })
+      .populate("job", "title location category type")
+      .populate("applicant", "name email avatar resume");
+
+    res.json(applications);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 //@desc  get application by id (Jobseeker or employer)
 exports.getApplicationById = async (req, res) => {
-    try {
-        const app = await Application.findById(req.params.id)
-        .populate("job", "title company")
-        .populate("applicant", "name email avatar resume");
+  try {
+    const app = await Application.findById(req.params.id)
+      .populate("job", "title company")
+      .populate("applicant", "name email avatar resume");
 
-        if (!app) return res.status(404).json({ message : "Application not found." , id: req.params.id });
-        
-        const isOwner =
-        app.applicant._id.toString() === req.user._id.toString() ||
-        app.job.company.toString() === req.user._id.toString();
+    if (!app)
+      return res
+        .status(404)
+        .json({ message: "Application not found.", id: req.params.id });
 
-        if (!isOwner) {
-            return res.status(403).json({ message: "Not authorized to view this application"});
-        }
+    const isOwner =
+      app.applicant._id.toString() === req.user._id.toString() ||
+      app.job.company.toString() === req.user._id.toString();
 
-        res.json(app);
-    } catch (err) {
-        res.status(500).json({message: err.message});
+    if (!isOwner) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to view this application" });
     }
+
+    res.json(app);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 //@desc Update application status (employer)
 exports.updateStatus = async (req, res) => {
-    try {
-        const { status } = req.body;
-        const app = await Application.findById(req.params.id).populate('job');
+  try {
+    const { status } = req.body;
+    const app = await Application.findById(req.params.id).populate("job");
 
-        if (!app || app.job.company.toString() !== req.user._id.toString()) {
-            return res.status(403).json({ message: 'Not authorized to update this application' });
-        }
-
-        app.status = status;
-        await app.save();
-
-        res.json({
-            message: "Application status updated",
-            status: app.status
-        });
-
-        // Notify applicant of status change (non-blocking)
-        const User = require("../models/User");
-        const applicant = await User.findById(app.applicant).select("name email");
-        if (applicant) sendStatusUpdateEmail(applicant, app.job, status);
-    } catch (err) {
-        res.status(500).json({message: err.message});
+    if (!app || app.job.company.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to update this application" });
     }
+
+    app.status = status;
+    await app.save();
+
+    res.json({
+      message: "Application status updated",
+      status: app.status,
+    });
+
+    // Notify applicant of status change (non-blocking)
+    const User = require("../models/User");
+    const applicant = await User.findById(app.applicant).select("name email");
+    if (applicant) sendStatusUpdateEmail(applicant, app.job, status);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
