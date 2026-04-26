@@ -1,9 +1,10 @@
 const Mailjet = require("node-mailjet");
 
-const mailjet = Mailjet.apiConnect(
-  process.env.MAILJET_API_KEY,
-  process.env.MAILJET_SECRET_KEY
-);
+const mailjet = new Mailjet.Client({
+  apiKey: process.env.MAILJET_API_KEY,
+  apiSecret: process.env.MAILJET_SECRET_KEY,
+  config: { version: "v3.1", output: "json" },
+});
 
 const FROM_EMAIL = process.env.MAILJET_FROM_EMAIL || "noreply@jobaxis.com";
 const FROM_NAME = "JobAxis";
@@ -13,7 +14,7 @@ const FROM_NAME = "JobAxis";
  */
 const sendEmail = async ({ toEmail, toName, subject, htmlContent, textContent }) => {
   try {
-    await mailjet.post("send", { version: "v3.1" }).request({
+    const response = await mailjet.post("send").request({
       Messages: [
         {
           From: { Email: FROM_EMAIL, Name: FROM_NAME },
@@ -24,9 +25,11 @@ const sendEmail = async ({ toEmail, toName, subject, htmlContent, textContent })
         },
       ],
     });
+    console.log("Email sent successfully");
   } catch (err) {
-    // Log but don't crash the main request
-    console.error("Mailjet error:", err?.response?.data || err.message);
+    const detail = err?.response?.body || err?.response?.data || err.message;
+    console.error("Mailjet error:", JSON.stringify(detail, null, 2));
+    throw new Error("Failed to send email: " + JSON.stringify(detail));
   }
 };
 
