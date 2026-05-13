@@ -3,7 +3,6 @@ const Mailjet = require("node-mailjet");
 const mailjet = new Mailjet.Client({
   apiKey: process.env.MAILJET_API_KEY,
   apiSecret: process.env.MAILJET_SECRET_KEY,
-  config: { version: "v3.1", output: "json" },
 });
 
 const FROM_EMAIL = process.env.MAILJET_FROM_EMAIL || "noreply@jobaxis.com";
@@ -14,7 +13,7 @@ const FROM_NAME = "JobAxis";
  */
 const sendEmail = async ({ toEmail, toName, subject, htmlContent, textContent }) => {
   try {
-    const response = await mailjet.post("send").request({
+    const response = await mailjet.post("send", { version: "v3.1" }).request({
       Messages: [
         {
           From: { Email: FROM_EMAIL, Name: FROM_NAME },
