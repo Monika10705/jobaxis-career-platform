@@ -56,15 +56,15 @@ const Navbar = () => {
                 </Link>
 
                 {/* auth buttons */}
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-5">
                     {user && (
                         <button
-                            className="p-2 rounded-xl hover:bg-gray-100 transition-colors duration-200 relative"
+                            className="relative p-1 hover:bg-gray-100 rounded-xl transition-colors duration-200"
                             onClick={() => navigate("/saved-jobs")}
                         >
-                            <Bookmark className="h-5 w-5 text-gray-500" />
+                            <Bookmark className="h-5 w-5 text-gray-700" />
                             {savedCount > 0 && (
-                                <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 rounded-full bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center">
+                                <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 rounded-full bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center leading-none">
                                     {savedCount}
                                 </span>
                             )}
