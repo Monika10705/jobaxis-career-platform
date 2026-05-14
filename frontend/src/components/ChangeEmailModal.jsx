@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { X, Mail, KeyRound, CheckCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
 import { useAuth } from "../context/AuthContext";
@@ -42,8 +43,21 @@ const ChangeEmailModal = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-      <div className="w-full max-w-md bg-white rounded-3xl border border-slate-200 shadow-xl p-8 relative">
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.88, y: 24 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.88, y: 24 }}
+          transition={{ type: 'spring', stiffness: 280, damping: 24 }}
+          className="w-full max-w-md bg-white rounded-3xl border border-slate-200 shadow-xl p-8 relative"
+        >
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-xl hover:bg-slate-100 transition-colors"
@@ -126,8 +140,9 @@ const ChangeEmailModal = ({ onClose }) => {
             </button>
           </div>
         )}
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

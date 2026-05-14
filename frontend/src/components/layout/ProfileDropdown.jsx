@@ -76,41 +76,44 @@ const ProfileDropdown = ({
                 </AnimatePresence>
             </div>
 
-            {showLogoutConfirm && createPortal(
+            {createPortal(
                 <AnimatePresence>
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm"
-                    >
+                    {showLogoutConfirm && (
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.85, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.85, y: 20 }}
-                            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                            className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-full max-w-sm mx-4"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm"
                         >
-                            <h3 className="text-lg font-semibold text-slate-900 mb-1">Sign out?</h3>
-                            <p className="text-sm text-slate-500 mb-6">Are you sure you want to sign out of your account?</p>
-                            <div className="flex gap-3">
-                                <motion.button
-                                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                                    onClick={() => setShowLogoutConfirm(false)}
-                                    className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 transition-colors"
-                                >
-                                    Cancel
-                                </motion.button>
-                                <motion.button
-                                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                                    onClick={() => { setShowLogoutConfirm(false); onLogout(); }}
-                                    className="flex-1 px-4 py-2.5 rounded-xl bg-red-600 text-white font-medium hover:bg-red-700 transition-colors"
-                                >
-                                    Sign out
-                                </motion.button>
-                            </div>
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.85, y: 20 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.85, y: 20 }}
+                                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                                className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-full max-w-sm mx-4"
+                            >
+                                <h3 className="text-lg font-semibold text-slate-900 mb-1">Sign out?</h3>
+                                <p className="text-sm text-slate-500 mb-6">Are you sure you want to sign out of your account?</p>
+                                <div className="flex gap-3">
+                                    <motion.button
+                                        whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                                        onClick={() => setShowLogoutConfirm(false)}
+                                        className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 transition-colors"
+                                    >
+                                        Cancel
+                                    </motion.button>
+                                    <motion.button
+                                        whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                                        onClick={() => { setShowLogoutConfirm(false); onLogout(); }}
+                                        className="flex-1 px-4 py-2.5 rounded-xl bg-red-600 text-white font-medium hover:bg-red-700 transition-colors"
+                                    >
+                                        Sign out
+                                    </motion.button>
+                                </div>
+                            </motion.div>
                         </motion.div>
-                    </motion.div>
+                    )}
                 </AnimatePresence>,
                 document.body
             )}

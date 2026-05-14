@@ -127,21 +127,23 @@ const JobCard = ({ job, onClick, onToggleSave, onApply, saved, hideApply }) => {
                 </div>
             </motion.div>
 
-            {showConfirm && createPortal(
+            {createPortal(
                 <AnimatePresence>
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm"
-                    >
+                    {showConfirm && (
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.85, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.85, y: 20 }}
-                            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                            className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-full max-w-sm mx-4"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm"
                         >
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.85, y: 20 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.85, y: 20 }}
+                                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                                className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-full max-w-sm mx-4"
+                            >
                             <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-4">
                                 <Briefcase className="w-6 h-6 text-blue-600" />
                             </div>
@@ -166,8 +168,9 @@ const JobCard = ({ job, onClick, onToggleSave, onApply, saved, hideApply }) => {
                                     Confirm
                                 </motion.button>
                             </div>
+                            </motion.div>
                         </motion.div>
-                    </motion.div>
+                    )}
                 </AnimatePresence>,
                 document.body
             )}

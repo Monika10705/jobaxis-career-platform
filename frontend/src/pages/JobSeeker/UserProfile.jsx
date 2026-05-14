@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Save,
   X,
@@ -123,7 +124,12 @@ const UserProfile = () => {
   }, [user]);
 
   return ( <>
-    <div className="bg-slate-50 min-h-screen">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25 }}
+      className="bg-slate-50 min-h-screen"
+    >
       <Navbar />
 
       <div className="pt-24 pb-10 px-4 sm:px-6 lg:px-8">
@@ -311,9 +317,11 @@ const UserProfile = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
 
-    {showChangeEmail && <ChangeEmailModal onClose={() => setShowChangeEmail(false)} />}
+    <AnimatePresence>
+      {showChangeEmail && <ChangeEmailModal onClose={() => setShowChangeEmail(false)} />}
+    </AnimatePresence>
   </> );
 };
 
