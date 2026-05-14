@@ -229,11 +229,11 @@ const DashboardLayout = ({ activeMenu, children }) => {
             {/* Notifications */}
             <button
               onClick={() => navigate("/notifications")}
-              className="relative p-1 hover:bg-gray-100 rounded-xl transition-colors duration-200"
+              className="relative p-2 hover:bg-gray-100 rounded-xl transition-colors duration-200 overflow-visible"
             >
               <Bell className="h-5 w-5 text-gray-700" />
               {notifCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center leading-none">
+                <span className="absolute -top-1.5 -right-1.5 h-4 min-w-4 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center leading-none z-10">
                   {notifCount}
                 </span>
               )}
