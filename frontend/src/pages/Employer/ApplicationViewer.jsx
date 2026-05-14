@@ -20,6 +20,7 @@ import DashboardLayout from "../../components/layout/DashboardLayout";
 import StatusBadge from "../../components/StatusBadge";
 import ApplicantProfilePreview from "../../components/Cards/ApplicantProfilePreview";
 import BackButton from "../../components/BackButton";
+import defaultAvatar from "../../assets/default-avatar.webp";
 
 const ApplicationViewer = () => {
   const location = useLocation();
@@ -185,11 +186,11 @@ const ApplicationViewer = () => {
                                   className="h-14 w-14 rounded-full object-cover shrink-0"
                                 />
                               ) : (
-                                <div className="h-14 w-14 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                                  <span className="text-blue-700 font-bold text-base">
-                                    {getInitials(application?.applicant?.name)}
-                                  </span>
-                                </div>
+                                <img
+                                  src={defaultAvatar}
+                                  alt={application?.applicant?.name}
+                                  className="h-14 w-14 rounded-full object-cover shrink-0"
+                                />
                               )}
 
                               <div className="min-w-0">

@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import defaultAvatar from "../assets/default-avatar.webp";
 /* eslint-disable react-refresh/only-export-components */
+
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -20,18 +22,23 @@ export const AuthProvider = ({ children }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const normalizeUser = (userData) => ({
+        ...userData,
+        avatar: userData?.avatar || defaultAvatar,
+    });
+
     const checkAuthStatus = async () => {
         try {
-            const token = localStorage.getItem('token');
-            const userStr = localStorage.getItem('user');
+            const token = localStorage.getItem("token");
+            const userStr = localStorage.getItem("user");
 
             if (token && userStr) {
                 const userData = JSON.parse(userStr);
-                setUser(userData);
+                setUser(normalizeUser(userData));
                 setIsAuthenticated(true);
             }
         } catch (error) {
-            console.error('Auth check failed:', error);
+            console.error("Auth check failed:", error);
             logout();
         } finally {
             setLoading(false);
@@ -39,28 +46,26 @@ export const AuthProvider = ({ children }) => {
     };
 
     const login = (userData, token) => {
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(userData));
-
-        setUser(userData);
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(userData));
+        setUser(normalizeUser(userData));
         setIsAuthenticated(true);
     };
 
     const logout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
-
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("user");
         setUser(null);
         setIsAuthenticated(false);
-        window.location.href = '/';
+        window.location.href = "/";
     };
 
     const updateUser = (updatedUserData) => {
         setUser((prevUser) => {
             const newUserData = { ...prevUser, ...updatedUserData };
-            localStorage.setItem('user', JSON.stringify(newUserData));
-            return newUserData;
+            localStorage.setItem("user", JSON.stringify(newUserData));
+            return normalizeUser(newUserData);
         });
     };
 

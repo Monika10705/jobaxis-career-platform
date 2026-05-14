@@ -10,6 +10,7 @@ import {
   Loader,
 } from "lucide-react";
 import BackButton from "../../components/BackButton";
+import defaultCompanyLogo from "../../assets/default-company-logo.jpg";
 import { useAuth } from "../../context/AuthContext";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
@@ -80,15 +81,17 @@ const JobDetails = () => {
             <div className="p-6 sm:p-8 border-b border-slate-100">
               <div className="flex items-start gap-5">
                 {jobDetails?.company?.companyLogo ? (
-                  <img
-                    src={jobDetails.company.companyLogo}
+                <img
+                    src={jobDetails.company.companyLogo || defaultCompanyLogo}
                     alt="Company Logo"
                     className="h-16 w-16 object-cover rounded-2xl border border-slate-200 shadow-sm shrink-0"
                   />
                 ) : (
-                  <div className="h-16 w-16 bg-slate-100 border border-slate-200 rounded-2xl flex items-center justify-center shrink-0">
-                    <Building2 className="h-7 w-7 text-slate-400" />
-                  </div>
+                  <img
+                    src={defaultCompanyLogo}
+                    alt="Company Logo"
+                    className="h-16 w-16 object-cover rounded-2xl border border-slate-200 shadow-sm shrink-0"
+                  />
                 )}
 
                 <div className="flex-1 min-w-0">

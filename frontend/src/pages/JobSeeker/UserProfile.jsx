@@ -19,6 +19,7 @@ import Navbar from "../../components/layout/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import ChangeEmailModal from "../../components/ChangeEmailModal";
 import BackButton from "../../components/BackButton";
+import defaultAvatar from "../../assets/default-avatar.webp";
 
 const UserProfile = () => {
   const { user, updateUser } = useAuth();
@@ -168,7 +169,7 @@ const UserProfile = () => {
               <div className="flex flex-col sm:flex-row sm:items-center gap-5">
                 <div className="relative">
                   <img
-                    src={formData?.avatar}
+                    src={formData?.avatar || defaultAvatar}
                     alt="Avatar"
                     className="w-24 h-24 rounded-3xl object-cover border-4 border-slate-200 shadow-sm"
                   />

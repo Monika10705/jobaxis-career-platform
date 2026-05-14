@@ -5,6 +5,7 @@ import { useState } from "react"
 import { createPortal } from "react-dom"
 import { useAuth } from "../../context/AuthContext"
 import StatusBadge from "../StatusBadge"
+import defaultCompanyLogo from "../../assets/default-company-logo.jpg"
 
 const JobCard = ({ job, onClick, onToggleSave, onApply, saved, hideApply }) => {
     const { user } = useAuth();
@@ -45,12 +46,12 @@ const JobCard = ({ job, onClick, onToggleSave, onApply, saved, hideApply }) => {
                                 className="w-14 h-14 object-cover rounded-2xl border-4 border-white/20 shadow-lg"
                             />
                         ) : (
-                            <motion.div
+                            <motion.img
                                 whileHover={{ scale: 1.05 }}
-                                className="w-14 h-14 bg-gray-50 border-2 border-gray-200 rounded-2xl flex items-center justify-center"
-                            >
-                                <Building2 className="w-8 h-8 text-gray-400" />
-                            </motion.div>
+                                src={defaultCompanyLogo}
+                                alt="Company Logo"
+                                className="w-14 h-14 object-cover rounded-2xl border-2 border-gray-200 shadow-lg"
+                            />
                         )}
 
                         <div className="flex-1">

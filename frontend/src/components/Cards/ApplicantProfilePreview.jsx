@@ -7,6 +7,7 @@ import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import toast from "react-hot-toast";
 import StatusBadge from "../../components/StatusBadge";
+import defaultAvatar from "../../assets/default-avatar.webp";
 
 const statusOptions = ["Applied", "In Review", "Rejected", "Accepted"];
 
@@ -84,11 +85,11 @@ const ApplicantProfilePreview = ({
                             className="h-20 w-20 rounded-full object-cover mx-auto"
                         />
                     ) : (
-                        <div className="h-20 w-20 rounded-full bg-blue-100 flex items-center justify-center mx-auto">
-                            <span className="text-blue-600 font-semibold text-xl">
-                                {getInitials(selectedApplicant.applicant.name)}
-                            </span>
-                        </div>
+                        <img
+                            src={defaultAvatar}
+                            alt={selectedApplicant.applicant.name}
+                            className="h-20 w-20 rounded-full object-cover mx-auto"
+                        />
                     )}
 
                     <h4 className="mt-4 text-xl font-semibold text-gray-900">

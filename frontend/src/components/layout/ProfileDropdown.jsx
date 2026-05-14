@@ -3,6 +3,7 @@ import { useState } from "react"
 import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { useNavigate } from "react-router-dom"
+import defaultAvatar from "../../assets/default-avatar.webp"
 
 const ProfileDropdown = ({
     isOpen,
@@ -26,11 +27,7 @@ const ProfileDropdown = ({
                     {avatar ? (
                         <img src={avatar} alt="Avatar" className="h-9 w-9 object-cover rounded-xl" />
                     ) : (
-                        <div className="h-8 w-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-                            <span className="text-white font-semibold text-sm">
-                                {companyName.charAt(0).toUpperCase()}
-                            </span>
-                        </div>
+                        <img src={defaultAvatar} alt="Avatar" className="h-9 w-9 object-cover rounded-xl" />
                     )}
                     <div className="hidden sm:block text-left">
                         <p className="text-sm font-medium text-gray-900">{companyName}</p>
