@@ -89,6 +89,8 @@ const UserProfile = () => {
   };
 
   const hasChanges = JSON.stringify(formData) !== JSON.stringify(profileData);
+
+  const handleCancel = () => {
     setFormData({ ...profileData });
   };
 
