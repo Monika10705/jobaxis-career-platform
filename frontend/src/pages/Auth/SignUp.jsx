@@ -618,6 +618,13 @@ const SignUp = () => {
                   )}
                 </button>
 
+                {!otpState.verified && (
+                  <p className='text-amber-600 text-sm text-center flex items-center justify-center gap-1.5'>
+                    <AlertCircle className='w-4 h-4 shrink-0' />
+                    Please verify your email with OTP before creating your account.
+                  </p>
+                )}
+
                 <div className='text-center pt-2'>
                   <p className='text-slate-600 text-sm sm:text-base'>
                     Already have an account?{" "}
