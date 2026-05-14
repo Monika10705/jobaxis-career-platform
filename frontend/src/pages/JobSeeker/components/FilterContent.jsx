@@ -51,10 +51,16 @@ const FilterContent = ({
             <input
               type="checkbox"
               className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-              checked={filters?.type === type.value}
-              onChange={(e) =>
-                handleFilterChange("type", e.target.checked ? type.value : "")
-              }
+              checked={(filters?.type || []).includes(type.value)}
+              onChange={(e) => {
+                const current = filters?.type || [];
+                handleFilterChange(
+                  "type",
+                  e.target.checked
+                    ? [...current, type.value]
+                    : current.filter((t) => t !== type.value)
+                );
+              }}
             />
             <span className="ml-3 text-gray-700 font-medium">{type.value}</span>
           </label>

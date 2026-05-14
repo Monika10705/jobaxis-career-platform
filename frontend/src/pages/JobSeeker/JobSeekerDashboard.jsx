@@ -33,7 +33,7 @@ const JobSeekerDashboard = () => {
     keyword: "",
     location: "",
     category: "",
-    type: "",
+    type: [],
     minSalary: "",
     maxSalary: "",
   });
@@ -55,7 +55,7 @@ const JobSeekerDashboard = () => {
       if (filterParams.location) params.append("location", filterParams.location);
       if (filterParams.minSalary) params.append("minSalary", filterParams.minSalary);
       if (filterParams.maxSalary) params.append("maxSalary", filterParams.maxSalary);
-      if (filterParams.type) params.append("type", filterParams.type);
+      if (filterParams.type?.length) params.append("type", filterParams.type.join(","));
       if (filterParams.category) params.append("category", filterParams.category);
       if (user) params.append("userId", user?._id);
 
@@ -92,10 +92,7 @@ const JobSeekerDashboard = () => {
 
       const hasFilters = Object.values(apiFilters).some(
         (value) =>
-          value !== "" &&
-          value !== false &&
-          value !== null &&
-          value !== undefined
+          (Array.isArray(value) ? value.length > 0 : value !== "" && value !== false && value !== null && value !== undefined)
       );
 
       if (hasFilters) {
@@ -121,14 +118,14 @@ const JobSeekerDashboard = () => {
       keyword: "",
       location: "",
       category: "",
-      type: "",
+      type: [],
       minSalary: "",
       maxSalary: "",
     });
   };
 
   const activeFilterCount = Object.values(filters).filter(
-    (value) => value !== "" && value !== null && value !== undefined
+    (value) => (Array.isArray(value) ? value.length > 0 : value !== "" && value !== null && value !== undefined)
   ).length;
 
   const MobileFilterOverlay = () => (
