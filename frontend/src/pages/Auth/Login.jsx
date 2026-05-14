@@ -230,7 +230,7 @@ const Login = () => {
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.25 }}
             className='w-full max-w-xl'
           >
             <div className='rounded-3xl bg-white border border-slate-200 shadow-xl p-8 sm:p-10'>

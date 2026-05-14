@@ -21,7 +21,7 @@ const Hero = () => {
                     <motion.h1
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
+                        transition={{ duration: 0.5 }}
                         className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight pt-10"
                     >
                         Find Your Dream Job or
@@ -34,7 +34,7 @@ const Hero = () => {
                     <motion.p
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.2, delay: 0.8 }}
+                        transition={{ duration: 0.2, delay: 0.3 }}
                         className="text-xl md:text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed"
                     >
                         Connect Talented Professionals with innovative companies.
@@ -45,7 +45,7 @@ const Hero = () => {
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: 0.8 }}
+                        transition={{ duration: 0.2, delay: 0.4 }}
                         className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 "
                     >
                         <motion.button
@@ -80,7 +80,7 @@ const Hero = () => {
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.8 }}
+                        transition={{ duration: 0.3, delay: 0.5 }}
                         className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto"
                     >
                         {stats.map((stat, index) => (
@@ -88,7 +88,7 @@ const Hero = () => {
                                 key={index}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.8 + index * 0.1, duration: 0.6 }}
+                                transition={{ delay: 0.5 + index * 0.08, duration: 0.3 }}
                                 className="flex flex-col items-center space-y-2 p-4 rounded-xl hover:bg-gray-50 transition-colors"
                             >
                                 <div className="w-12 h-12 bg-gradient-to-r from-blue-100 to-purple-100 rounded-xl flex items-center justify-center mb-2">

@@ -1,3 +1,4 @@
+import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
   DollarSign,
@@ -64,11 +65,16 @@ const JobDetails = () => {
       <Navbar />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-24 pb-12">
-        <div className="mb-5">
+        <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.2 }} className="mb-5">
           <BackButton />
-        </div>
+        </motion.div>
         {jobDetails && (
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden"
+          >
 
             {/* Header */}
             <div className="p-6 sm:p-8 border-b border-slate-100">
@@ -171,14 +177,26 @@ const JobDetails = () => {
 
 
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
 
       {/* Apply Confirmation Modal */}
       {showConfirm && createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-full max-w-sm mx-4">
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.85, y: 20 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 w-full max-w-sm mx-4"
+            >
             <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-4">
               <Briefcase className="w-6 h-6 text-blue-600" />
             </div>
@@ -203,8 +221,9 @@ const JobDetails = () => {
                 {applying ? "Applying..." : "Confirm"}
               </button>
             </div>
-          </div>
-        </div>,
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>,
         document.body
       )}
     </div>

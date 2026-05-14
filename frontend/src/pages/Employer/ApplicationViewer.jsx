@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import {
   Users,
@@ -107,10 +108,18 @@ const ApplicationViewer = () => {
                 </p>
               </div>
             ) : (
-              <div className="space-y-8">
-                {Object.values(groupedApplications).map(({ job, applications }) => (
-                  <div
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-8"
+              >
+                {Object.values(groupedApplications).map(({ job, applications }, gIdx) => (
+                  <motion.div
                     key={job._id}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: gIdx * 0.08, duration: 0.3 }}
                     className="rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden"
                   >
                     {/* Job Header */}
@@ -159,9 +168,12 @@ const ApplicationViewer = () => {
                       </h3>
 
                       <div className="space-y-4">
-                        {applications.map((application) => (
-                          <div
+                        {applications.map((application, aIdx) => (
+                          <motion.div
                             key={application._id}
+                            initial={{ opacity: 0, x: -16 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: aIdx * 0.06, duration: 0.25 }}
                             className="flex flex-col xl:flex-row xl:items-center justify-between gap-5 rounded-2xl border border-slate-200 bg-white px-5 py-5 hover:shadow-sm transition-all"
                           >
                             {/* Left */}
@@ -219,26 +231,34 @@ const ApplicationViewer = () => {
                                 View Profile
                               </button>
                             </div>
-                          </div>
+                          </motion.div>
                         ))}
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             )}
 
-            {selectedApplicant && (
-              <ApplicantProfilePreview
-                selectedApplicant={selectedApplicant}
-                setSelectedApplicant={setSelectedApplicant}
-                handleDownloadResume={handleDownloadResume}
-                handleClose={() => {
-                  setSelectedApplicant(null);
-                  fetchApplications();
-                }}
-              />
-            )}
+            <AnimatePresence>
+              {selectedApplicant && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <ApplicantProfilePreview
+                    selectedApplicant={selectedApplicant}
+                    setSelectedApplicant={setSelectedApplicant}
+                    handleDownloadResume={handleDownloadResume}
+                    handleClose={() => {
+                      setSelectedApplicant(null);
+                      fetchApplications();
+                    }}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       )}
