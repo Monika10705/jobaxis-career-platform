@@ -149,7 +149,7 @@ const DashboardLayout = ({ activeMenu, children }) => {
         </nav>
 
         {/* Logout */}
-        <div className="absolute bottom-4 left-4 right-4">
+        {/* <div className="absolute bottom-4 left-4 right-4">
           <button
             className="w-full flex items-center px-3 py-3 text-sm font-medium rounded-2xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all duration-200"
             onClick={logout}
@@ -157,7 +157,7 @@ const DashboardLayout = ({ activeMenu, children }) => {
             <LogOut className="h-5 w-5 flex-shrink-0 text-slate-500" />
             {!sidebarCollapsed && <span className="ml-3">Logout</span>}
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* Mobile Overlay */}
