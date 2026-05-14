@@ -24,7 +24,14 @@ const Navbar = () => {
             .then(res => setSavedCount(res.data?.length || 0))
             .catch(() => {});
         axiosInstance.get(API_PATHS.APPLICATIONS.GET_MY_APPLICATIONS)
-            .then(res => setNotifCount(res.data?.length || 0))
+            .then(res => {
+                const lastSeen = localStorage.getItem(`lastNotifSeen_${user._id}`);
+                const apps = res.data || [];
+                const newCount = lastSeen
+                    ? apps.filter(a => new Date(a.createdAt) > new Date(lastSeen)).length
+                    : apps.length;
+                setNotifCount(newCount);
+            })
             .catch(() => {});
     }, [user]);
 

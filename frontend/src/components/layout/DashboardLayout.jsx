@@ -49,10 +49,19 @@ const DashboardLayout = ({ activeMenu, children }) => {
     axiosInstance.get(API_PATHS.JOBS.GET_JOBS_EMPLOYER)
       .then(async (res) => {
         const jobs = res.data || [];
-        const counts = await Promise.all(
-          jobs.map(j => axiosInstance.get(API_PATHS.APPLICATIONS.GET_ALL_APPLICATIONS(j._id)).then(r => r.data?.length || 0).catch(() => 0))
+        const lastSeen = localStorage.getItem(`lastNotifSeen_${user._id}`);
+        const allApps = await Promise.all(
+          jobs.map(j =>
+            axiosInstance.get(API_PATHS.APPLICATIONS.GET_ALL_APPLICATIONS(j._id))
+              .then(r => r.data || [])
+              .catch(() => [])
+          )
         );
-        setNotifCount(counts.reduce((a, b) => a + b, 0));
+        const flat = allApps.flat();
+        const newCount = lastSeen
+          ? flat.filter(a => new Date(a.createdAt) > new Date(lastSeen)).length
+          : flat.length;
+        setNotifCount(newCount);
       })
       .catch(() => {});
   }, [user]);

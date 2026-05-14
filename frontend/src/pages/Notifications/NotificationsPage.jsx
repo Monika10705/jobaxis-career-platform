@@ -3,9 +3,15 @@ import DashboardLayout from "../../components/layout/DashboardLayout";
 import EmployerNotifications from "./EmployerNotifications";
 import JobSeekerNotifications from "./JobSeekerNotifications";
 import Navbar from "../../components/layout/Navbar";
+import { useEffect } from "react";
 
 const NotificationsPage = () => {
   const { user } = useAuth();
+
+  // Mark notifications as seen when page is visited
+  useEffect(() => {
+    localStorage.setItem(`lastNotifSeen_${user?._id}`, new Date().toISOString());
+  }, [user]);
 
   if (user?.role === "employer") {
     return (
