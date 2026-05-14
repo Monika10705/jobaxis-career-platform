@@ -17,6 +17,7 @@ import uploadImage from "../../utils/uploadImage";
 import Navbar from "../../components/layout/Navbar";
 import { Link } from "react-router-dom";
 import ChangeEmailModal from "../../components/ChangeEmailModal";
+import BackButton from "../../components/BackButton";
 
 const UserProfile = () => {
   const { user, updateUser } = useAuth();
@@ -129,13 +130,7 @@ const UserProfile = () => {
         <div className="max-w-5xl mx-auto">
           {/* Top */}
           <div className="flex items-center gap-3 mb-6">
-            <Link
-              to="/find-jobs"
-              onClick={handleCancel}
-              className="h-11 w-11 rounded-2xl border border-slate-200 bg-white flex items-center justify-center text-slate-700 hover:bg-slate-50 transition-colors"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Link>
+            <BackButton to="/find-jobs" />
 
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">

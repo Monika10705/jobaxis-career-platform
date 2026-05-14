@@ -17,4 +17,8 @@
     overflow-x: hidden;
   }
 
+  button, a {
+    cursor: pointer;
+  }
+
 }

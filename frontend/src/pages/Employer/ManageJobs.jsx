@@ -17,6 +17,7 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import DashboardLayout from "../../components/layout/DashboardLayout";
+import BackButton from "../../components/BackButton";
 
 const ManageJobs = () => {
   const navigate = useNavigate();
@@ -139,12 +140,7 @@ const ManageJobs = () => {
           {/* Header */}
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
             <div className="flex items-start gap-3">
-              <button
-                onClick={() => navigate(-1)}
-                className="shrink-0 h-11 w-11 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-colors"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </button>
+              <BackButton />
 
               <div>
                 <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">

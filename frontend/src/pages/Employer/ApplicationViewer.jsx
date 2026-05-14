@@ -18,6 +18,7 @@ import { getInitials } from "../../utils/helper";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import StatusBadge from "../../components/StatusBadge";
 import ApplicantProfilePreview from "../../components/Cards/ApplicantProfilePreview";
+import BackButton from "../../components/BackButton";
 
 const ApplicationViewer = () => {
   const location = useLocation();
@@ -88,13 +89,7 @@ const ApplicationViewer = () => {
           <div className="max-w-7xl mx-auto">
             {/* Header */}
             <div className="flex items-center gap-4 mb-8">
-              <button
-                onClick={() => navigate("/manage-jobs")}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl border border-slate-200 bg-white text-slate-700 font-medium hover:bg-slate-50 transition-colors"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Back
-              </button>
+              <BackButton to="/manage-jobs" />
 
               <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">
                 Applications Overview

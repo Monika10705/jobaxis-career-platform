@@ -7,12 +7,22 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import ProfileDropdown from "./ProfileDropdown";
+import axiosInstance from "../../utils/axiosInstance";
+import { API_PATHS } from "../../utils/apiPaths";
 
 const Navbar = () => {
 
     const { user, logout, isAuthenticated } = useAuth();
     const navigate = useNavigate();
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+    const [savedCount, setSavedCount] = useState(0);
+
+    useEffect(() => {
+        if (!user) return;
+        axiosInstance.get(API_PATHS.JOBS.GET_SAVED_JOBS)
+            .then(res => setSavedCount(res.data?.length || 0))
+            .catch(() => {});
+    }, [user]);
 
     // Close dropdowns when clicking outside
     useEffect(() => {
@@ -53,6 +63,11 @@ const Navbar = () => {
                             onClick={() => navigate("/saved-jobs")}
                         >
                             <Bookmark className="h-5 w-5 text-gray-500" />
+                            {savedCount > 0 && (
+                                <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 rounded-full bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center">
+                                    {savedCount}
+                                </span>
+                            )}
                         </button>
                     )}
                     <button

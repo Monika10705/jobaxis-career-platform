@@ -12,6 +12,7 @@ import { useAuth } from "../../context/AuthContext";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import moment from "moment";
+import BackButton from "../../components/BackButton";
 
 const JobSeekerNotifications = () => {
   const navigate = useNavigate();
@@ -85,12 +86,7 @@ const JobSeekerNotifications = () => {
         {/* Top */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => navigate(-1)}
-              className="h-11 w-11 rounded-2xl border border-slate-200 bg-white flex items-center justify-center text-slate-700 hover:bg-slate-50 transition-colors"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </button>
+            <BackButton />
 
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">

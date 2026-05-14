@@ -27,7 +27,9 @@ exports.getJobs = async (req, res) => {
       ...(keyword && { title: { $regex: keyword, $options: "i" } }),
       ...(location && { location: { $regex: location, $options: "i" } }),
       ...(category && { category }),
-      ...(type && { type }),
+      ...(type && {
+        type: { $in: type.split(",").map((t) => t.trim()) },
+      }),
     };
 
     if (minSalary || maxSalary) {

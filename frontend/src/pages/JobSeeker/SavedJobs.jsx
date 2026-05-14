@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../../components/layout/Navbar";
 import JobCard from "../../components/Cards/JobCard";
 import toast from "react-hot-toast";
-import { nav } from "framer-motion/client";
+import BackButton from "../../components/BackButton";
 
 const SavedJobs = () => {
   const { user } = useAuth();
@@ -57,12 +57,7 @@ const SavedJobs = () => {
           <div className="bg-white p-6 rounded-lg">
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-4">
-                <button
-                  onClick={() => navigate(-1)}
-                  className="group flex items-center space-x-2 px-3.5 py-2.5 text-sm font-medium text-gray-600 hover:text-white bg-white/50 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-600 border border-gray-200 hover:border-transparent rounded-xl transition-all duration-300 shadow-lg shadow-gray-100 hover:shadow-xl transform hover:-translate-y-0.5"
-                >
-                  <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-                </button>
+                <BackButton />
 
                 <h1 className="text-lg lg:text-xl font-semibold leading-tight text-gray-900">
                   Saved Jobs

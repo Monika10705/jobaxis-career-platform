@@ -18,6 +18,7 @@ import SelectField from '../../components/Input/SelectField';
 import TextareaField from '../../components/Input/TextareaField';
 import JobPostingPreview from '../../components/Cards/JobPostingPreview';
 import toast from "react-hot-toast";
+import BackButton from '../../components/BackButton';
 
 const JobPostingForm = () => {
   const navigate = useNavigate();
@@ -207,13 +208,7 @@ const JobPostingForm = () => {
           <div className='bg-white shadow-xl rounded-2xl p-6 sm:p-8'>
             <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8'>
               <div className='flex items-start sm:items-center gap-3'>
-                <button
-                  type='button'
-                  onClick={() => navigate(-1)}
-                  className='shrink-0 h-11 w-11 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors duration-200'
-                >
-                  <ArrowLeft className='h-5 w-5' />
-                </button>
+                <BackButton />
 
                 <div>
                   <h2 className='text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent'>
@@ -359,13 +354,7 @@ const JobPostingForm = () => {
               </div>
 
               <div className='pt-4 flex flex-col sm:flex-row items-center gap-3'>
-                <button
-                  type='button'
-                  onClick={() => navigate(-1)}
-                  className='w-full sm:w-auto px-5 py-3 rounded-xl border border-slate-300 text-slate-700 font-medium hover:bg-slate-50 transition-colors duration-200'
-                >
-                  Back
-                </button>
+                <BackButton />
 
                 <button
                   type='button'

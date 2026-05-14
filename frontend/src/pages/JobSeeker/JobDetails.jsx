@@ -8,6 +8,7 @@ import {
   CheckCircle,
   Loader,
 } from "lucide-react";
+import BackButton from "../../components/BackButton";
 import { useAuth } from "../../context/AuthContext";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
@@ -63,6 +64,9 @@ const JobDetails = () => {
       <Navbar />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-24 pb-12">
+        <div className="mb-5">
+          <BackButton />
+        </div>
         {jobDetails && (
           <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
 
@@ -165,18 +169,7 @@ const JobDetails = () => {
                 </div>
               </div>
 
-              {/* Bottom Apply */}
-              {!jobDetails?.applicationStatus && (
-                <div className="flex justify-center pt-2">
-                  <button
-                    onClick={() => setShowConfirm(true)}
-                    className="px-10 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-2xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-md shadow-blue-100 hover:shadow-lg hover:-translate-y-0.5 flex items-center gap-2"
-                  >
-                    <Briefcase className="h-4 w-4" />
-                    Apply Now
-                  </button>
-                </div>
-              )}
+
             </div>
           </div>
         )}

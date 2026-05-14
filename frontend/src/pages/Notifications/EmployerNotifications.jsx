@@ -9,11 +9,11 @@ import {
     Archive,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-// import DashboardLayout from "../../components/layout/DashboardLayout";
 import { useAuth } from "../../context/AuthContext";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import moment from "moment";
+import BackButton from "../../components/BackButton";
 
 const EmployerNotifications = () => {
     const navigate = useNavigate();
@@ -174,12 +174,7 @@ const EmployerNotifications = () => {
                 {/* Top */}
                 <div className="flex items-center justify-between gap-4 mb-6">
                     <div className="flex items-center gap-3">
-                        <button
-                            onClick={() => navigate(-1)}
-                            className="h-11 w-11 rounded-2xl border border-slate-200 bg-blue-600 flex items-center justify-center text-white hover:bg-blue-700 transition-colors"
-                        >
-                            <ArrowLeft className="h-5 w-5" />
-                        </button>
+                    <BackButton />
 
                         <div>
                             <h1 className="text-2xl sm:text-3xl font-bold text-blue-700">
