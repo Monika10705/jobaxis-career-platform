@@ -18,6 +18,12 @@ const Navbar = () => {
     const [savedCount, setSavedCount] = useState(0);
     const [notifCount, setNotifCount] = useState(0);
 
+    const handleNotifClick = () => {
+        localStorage.setItem(`lastNotifSeen_${user?._id}`, new Date().toISOString());
+        setNotifCount(0);
+        navigate("/notifications");
+    };
+
     useEffect(() => {
         if (!user) return;
         axiosInstance.get(API_PATHS.JOBS.GET_SAVED_JOBS)
@@ -82,7 +88,7 @@ const Navbar = () => {
                         </button>
                     )}
                     <button
-                        onClick={() => navigate("/notifications")}
+                        onClick={handleNotifClick}
                         className="relative p-1 hover:bg-gray-100 rounded-xl transition-colors duration-200"
                     >
                         <Bell className="h-5 w-5 text-gray-700" />
