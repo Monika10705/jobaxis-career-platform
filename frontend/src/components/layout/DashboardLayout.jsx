@@ -11,6 +11,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { NAVIGATION_MENU } from "../../utils/data";
 import ProfileDropdown from "./ProfileDropdown";
+import axiosInstance from "../../utils/axiosInstance";
+import { API_PATHS } from "../../utils/apiPaths";
 
 const NavigationItem = ({ item, isActive, onClick, isCollapsed }) => {
   const Icon = item.icon;
@@ -40,6 +42,20 @@ const DashboardLayout = ({ activeMenu, children }) => {
   const [activeNavItem, setActiveNavItem] = useState(activeMenu || "dashboard");
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [notifCount, setNotifCount] = useState(0);
+
+  useEffect(() => {
+    if (!user) return;
+    axiosInstance.get(API_PATHS.JOBS.GET_JOBS_EMPLOYER)
+      .then(async (res) => {
+        const jobs = res.data || [];
+        const counts = await Promise.all(
+          jobs.map(j => axiosInstance.get(API_PATHS.APPLICATIONS.GET_ALL_APPLICATIONS(j._id)).then(r => r.data?.length || 0).catch(() => 0))
+        );
+        setNotifCount(counts.reduce((a, b) => a + b, 0));
+      })
+      .catch(() => {});
+  }, [user]);
 
   // Handle responsive behavior
   useEffect(() => {
@@ -213,9 +229,14 @@ const DashboardLayout = ({ activeMenu, children }) => {
             {/* Notifications */}
             <button
               onClick={() => navigate("/notifications")}
-              className="relative bg-gray-100 p-2 rounded-xl hover:bg-gray-100 transition-colors duration-200"
+              className="relative p-1 hover:bg-gray-100 rounded-xl transition-colors duration-200"
             >
-              <Bell className="h-5 w-5" />
+              <Bell className="h-5 w-5 text-gray-700" />
+              {notifCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center leading-none">
+                  {notifCount}
+                </span>
+              )}
             </button>
 
             {/* Profile */}
