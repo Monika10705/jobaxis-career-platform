@@ -16,12 +16,13 @@ import { API_PATHS } from "../../utils/apiPaths";
 import toast from "react-hot-toast";
 import uploadImage from "../../utils/uploadImage";
 import Navbar from "../../components/layout/Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ChangeEmailModal from "../../components/ChangeEmailModal";
 import BackButton from "../../components/BackButton";
 
 const UserProfile = () => {
   const { user, updateUser } = useAuth();
+  const navigate = useNavigate();
   const [showChangeEmail, setShowChangeEmail] = useState(false);
 
   const [profileData, setProfileData] = useState({
@@ -78,6 +79,7 @@ const UserProfile = () => {
         toast.success("Profile Details Updated Successfully !!");
         setProfileData({ ...formData });
         updateUser({ ...formData });
+        navigate("/find-jobs");
       }
     } catch (error) {
       console.error("Profile update failed:", error);
