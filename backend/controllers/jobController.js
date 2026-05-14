@@ -49,10 +49,9 @@ exports.getJobs = async (req, res) => {
         delete query.$and;
       }
     }
-    const jobs = await Job.find(query).populate(
-      "company",
-      "name companyName companyLogo",
-    );
+    const jobs = await Job.find(query)
+      .populate("company", "name companyName companyLogo")
+      .sort({ createdAt: -1 });
 
     let savedJobIds = [];
     let appliedJobStatusMap = {};
@@ -102,6 +101,7 @@ exports.getJobEmployer = async (req, res) => {
     //Get all jobs posted by employer
     const jobs = await Job.find({ company: userId })
       .populate("company", "name companyName companyLogo")
+      .sort({ createdAt: -1 })
       .lean(); // .lean() makes jobs plain JS objects so we can add new fields
 
     // count applications for each job
