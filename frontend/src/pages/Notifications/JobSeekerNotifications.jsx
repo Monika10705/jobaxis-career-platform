@@ -29,15 +29,13 @@ const JobSeekerNotifications = () => {
         API_PATHS.APPLICATIONS.GET_MY_APPLICATIONS
       );
       const applications = response.data || [];
-      console.log("Applications Response:", applications);
-      console.log("Mapped Notifications:", mappedNotifications);
 
       const mappedNotifications = applications
         .map((app) => ({
           id: app._id,
           jobId: app?.job?._id,
           jobTitle: app?.job?.title || "Untitled Job",
-          companyName: app?.job?.company?.name || "Unknown Company",
+          companyName: app?.job?.company?.companyName || app?.job?.company?.name || "Unknown Company",
           location: app?.job?.location || "Unknown Location",
           status: app?.status || "Pending",
           createdAt: app?.createdAt,

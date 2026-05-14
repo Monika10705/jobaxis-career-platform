@@ -101,7 +101,7 @@ const JobCard = ({ job, onClick, onToggleSave, onApply, saved, hideApply }) => {
                             ) : (
                                 !hideApply && (
                                     <button
-                                        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm px-5 py-2.5 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5"
+                                        className="bg-gradient-to-r from-blue-50 to-blue-50 text-sm text-blue-700 hover:text-white px-6 py-2.5 rounded-xl hover:from-blue-500 hover:to-blue-600 transition-all duration-200 font-semibold transform hover:-translate-y-0.5"
                                         onClick={(e) => { e.stopPropagation(); setShowConfirm(true); }}
                                     >
                                         Apply Now

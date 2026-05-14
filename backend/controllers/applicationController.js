@@ -48,7 +48,7 @@ exports.getMyApplications = async (req, res) => {
         select: "title company location type",
         populate: {
           path: "company",
-          select: "name",
+          select: "name companyName",
         },
       })
       .sort({ createdAt: -1 });

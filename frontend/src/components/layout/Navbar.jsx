@@ -16,11 +16,15 @@ const Navbar = () => {
     const navigate = useNavigate();
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
     const [savedCount, setSavedCount] = useState(0);
+    const [notifCount, setNotifCount] = useState(0);
 
     useEffect(() => {
         if (!user) return;
         axiosInstance.get(API_PATHS.JOBS.GET_SAVED_JOBS)
             .then(res => setSavedCount(res.data?.length || 0))
+            .catch(() => {});
+        axiosInstance.get(API_PATHS.APPLICATIONS.GET_MY_APPLICATIONS)
+            .then(res => setNotifCount(res.data?.length || 0))
             .catch(() => {});
     }, [user]);
 
@@ -72,12 +76,13 @@ const Navbar = () => {
                     )}
                     <button
                         onClick={() => navigate("/notifications")}
-                        className="relative bg-gray-100 p-2 rounded-xl hover:bg-gray-200 transition-colors duration-200"
+                        className="relative p-1 hover:bg-gray-100 rounded-xl transition-colors duration-200"
                     >
                         <Bell className="h-5 w-5 text-gray-700" />
-
-                        {user?.lastNotificationSeen && (
-                            <span className="absolute top-1.5 right-1.5 h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-white"></span>
+                        {notifCount > 0 && (
+                            <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center leading-none">
+                                {notifCount}
+                            </span>
                         )}
                     </button>
 
