@@ -201,9 +201,11 @@ const EmployerNotifications = () => {
                 </div>
 
                 {loading ? (
-                    <div className="rounded-3xl border border-slate-200 bg-white py-20 text-center shadow-sm">
-                        <Bell className="h-12 w-12 text-slate-300 mx-auto animate-pulse" />
-                        <p className="text-slate-500 mt-4">Loading notifications...</p>
+                    <div className="flex items-center justify-center min-h-[60vh]">
+                        <div className="text-center">
+                            <Bell className="h-12 w-12 text-slate-300 mx-auto animate-pulse" />
+                            <p className="text-slate-500 mt-4">Loading notifications...</p>
+                        </div>
                     </div>
                 ) : notifications.length === 0 ? (
                     <div className="rounded-3xl border border-slate-200 bg-white py-20 text-center shadow-sm">
