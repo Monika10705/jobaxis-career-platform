@@ -26,7 +26,9 @@ exports.getJobs = async (req, res) => {
       isClosed: false,
       ...(keyword && { title: { $regex: keyword, $options: "i" } }),
       ...(location && { location: { $regex: location, $options: "i" } }),
-      ...(category && { category }),
+      ...(category && {
+        category: { $in: category.split(",").map((c) => c.trim()) },
+      }),
       ...(type && {
         type: { $in: type.split(",").map((t) => t.trim()) },
       }),

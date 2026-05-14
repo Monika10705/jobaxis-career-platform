@@ -32,8 +32,7 @@ const JobSeekerDashboard = () => {
   const [filters, setFilters] = useState({
     keyword: "",
     location: "",
-    category: "",
-    type: [],
+    category: [],
     minSalary: "",
     maxSalary: "",
   });
@@ -56,7 +55,7 @@ const JobSeekerDashboard = () => {
       if (filterParams.minSalary) params.append("minSalary", filterParams.minSalary);
       if (filterParams.maxSalary) params.append("maxSalary", filterParams.maxSalary);
       if (filterParams.type?.length) params.append("type", filterParams.type.join(","));
-      if (filterParams.category) params.append("category", filterParams.category);
+      if (filterParams.category?.length) params.append("category", filterParams.category.join(","));
       if (user) params.append("userId", user?._id);
 
       const response = await axiosInstance.get(
@@ -117,7 +116,7 @@ const JobSeekerDashboard = () => {
     setFilters({
       keyword: "",
       location: "",
-      category: "",
+      category: [],
       type: [],
       minSalary: "",
       maxSalary: "",
