@@ -88,7 +88,7 @@ const UserProfile = () => {
     }
   };
 
-  const handleCancel = () => {
+  const hasChanges = JSON.stringify(formData) !== JSON.stringify(profileData);
     setFormData({ ...profileData });
   };
 
@@ -304,7 +304,7 @@ const UserProfile = () => {
 
                 <button
                   onClick={handleSave}
-                  disabled={saving || uploading.avatar || uploading.logo}
+                  disabled={saving || uploading.avatar || uploading.logo || !hasChanges}
                   className="px-6 py-3 bg-slate-900 text-white rounded-2xl hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
                 >
                   {saving ? (
