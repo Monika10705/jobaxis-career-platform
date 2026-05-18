@@ -96,23 +96,13 @@ const Login = () => {
       if (token) {
         login(response.data, token);
 
-        // Redirect based on role
         setTimeout(() => {
           window.location.href =
             role === "employer"
               ? "/employer-dashboard"
               : "/find-jobs";
-        }, 2000);
+        }, 1500);
       }
-
-      // Redirect based on user role
-      setTimeout(() => {
-        const redirectPath = user.role === "employer"
-          ? "/employer-dashboard"
-          : "/find-jobs";
-
-        window.location.href = redirectPath;
-      }, 1500);
 
     } catch (error) {
       setFormState(prev => ({
