@@ -2,7 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const User = require('./models/User');
 
-const BASE_URL = 'http://localhost:8000';
+const BASE_URL = 'http://jobaxis-backend.onrender.com';
 
 const fixLogos = async () => {
   await mongoose.connect(process.env.MONGO_URI);
